@@ -11,12 +11,12 @@ const OurHistoryPage: React.FC = () => {
 
 			<main className='container mx-auto px-4 py-12'>
 				<div className='max-w-4xl mx-auto'>
-					<h1 className='font-playfair text-4xl md:text-5xl font-bold text-gray-800 mb-8 text-center'>
+					<h1 className='font-playfair text-4xl md:text-5xl font-bold text-gray-800 text-mystic-gold mb-8 text-center'>
 						Nuestra Historia
 					</h1>
 
 					<div className='prose prose-lg mx-auto'>
-						<div className='bg-gradient-to-br from-mystic-lavender/20 via-mystic-cream to-mystic-rose/20 p-8 rounded-lg shadow-lg mb-12'>
+						<div className='bg-gradient-to-br from-mystic-rose via-mystic-cream to-mystic-lavender opacity-80 p-8 rounded-lg shadow-lg mb-12'>
 							<p className='font-montserrat text-gray-700 mb-6 leading-relaxed'>
 								En el corazón de nuestra ciudad, Universo Dual nació de un sueño compartido: crear
 								un espacio donde la magia y la artesanía se encuentran. Fundado en 2020, durante un
@@ -33,7 +33,7 @@ const OurHistoryPage: React.FC = () => {
 						</div>
 
 						<div className='grid md:grid-cols-2 gap-8 mb-12'>
-							<div className='bg-mystic-cream p-6 rounded-lg shadow-md'>
+							<div className='bg-gradient-to-br from-mystic-lavender via-mystic-cream to-mystic-rose opacity-70 p-6 rounded-lg shadow-md'>
 								<h2 className='font-playfair text-2xl font-bold text-mystic-gold mb-4'>
 									Nuestra Misión
 								</h2>
@@ -44,15 +44,15 @@ const OurHistoryPage: React.FC = () => {
 								</p>
 							</div>
 
-							<div className='bg-mystic-cream p-6 rounded-lg shadow-md'>
+							<div className='bg-gradient-to-br  from-mystic-cream via-mystic-rose to-mystic-lavender opacity-70 p-6 rounded-lg shadow-md'>
 								<h2 className='font-playfair text-2xl font-bold text-mystic-gold mb-4'>
 									Nuestros Valores
 								</h2>
 								<ul className='font-montserrat text-gray-700 list-disc list-inside space-y-2'>
-									<li>Artesanía consciente y sostenible</li>
-									<li>Respeto por las tradiciones ancestrales</li>
-									<li>Compromiso con la calidad</li>
-									<li>Servicio auténtico y personalizado</li>
+									<p>✨ Artesanía consciente y sostenible</p>
+									<p>✨ Respeto por las tradiciones ancestrales</p>
+									<p>✨ Compromiso con la calidad</p>
+									<p>✨ Servicio auténtico y personalizado</p>
 								</ul>
 							</div>
 						</div>
@@ -66,6 +66,21 @@ const OurHistoryPage: React.FC = () => {
 					</div>
 				</div>
 			</main>
+			{/* Footer */}
+			<footer className='bg-mystic-lavender py-5'>
+				<div className='container mx-auto px-4 text-center'>
+					<h3 className='font-playfair text-2xl font-bold text-gray-800 mb-2'>Universo Dual ✨</h3>
+					<p className='font-montserrat text-gray-600 mb-6'>
+						Conectando tu alma con la magia del universo⭐
+					</p>
+					<div className='flex justify-center space-x-6 text-sm text-gray-500 mb-2'>
+						<span> Universo Dual 2025 © Todos los derechos reservados</span>
+					</div>
+					<div className='flex justify-center space-x-6 text-sm text-gray-500'>
+						Creado por Jacqueline <div className='animate-bounce'>💖</div>
+					</div>
+				</div>
+			</footer>
 		</div>
 	)
 }
