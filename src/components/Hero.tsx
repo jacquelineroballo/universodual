@@ -1,11 +1,13 @@
 import React from 'react'
 import { Button } from './ui/button'
-import { useNavigate } from 'react-router-dom'
 
-const Hero: React.FC = () => {
-	const navigate = useNavigate()
+interface HeroProps {
+	onShopNowClick?: () => void
+}
+
+const Hero: React.FC<HeroProps> = ({ onShopNowClick }) => {
 	return (
-		<section className='relative bg-gradient-to-br from-mystic-rose via-mystic-cream to-mystic-lavender min-h-[100vh] flex items-center'>
+		<section className='relative bg-gradient-to-br from-mystic-lavender via-mystic-cream to-mystic-rose min-h-[70vh] flex items-center'>
 			{/* Elementos decorativos flotantes */}
 			<div className='absolute inset-0 overflow-hidden'>
 				<div className='absolute top-20 left-10 w-4 h-4 bg-mystic-gold rounded-full animate-float opacity-60'></div>
@@ -27,21 +29,20 @@ const Hero: React.FC = () => {
 				<div className='max-w-3xl mx-auto text-center'>
 					<h1 className='font-playfair text-5xl md:text-6xl font-bold text-gray-800 mb-6 leading-tight'>
 						Bienvenido al
-						<span className='text-mystic-gold block'>UNIVERSO DUAL</span>
+						<span className='text-mystic-gold block'>Universo Dual</span>
 					</h1>
 
-					<p className='font-montserrat text-xl text-gray-700 mb-3 leading-relaxed'>
-						Descubre la magia en cada producto artesanal.
+					<p className='font-montserrat text-xl text-gray-700 mb-8 leading-relaxed'>
+						Descubre la magia en cada producto artesanal. Velas aromáticas, inciensos sagrados y
+						cristales energéticos para elevar tu espíritu y transformar tu espacio.
 					</p>
-					<p className='font-montserrat  text-gray-700 mb-8'>
-						Velas aromáticas, inciensos y sahumos artesanales, cristales energéticos para elevar tu
-						energía y transformar tu espacio.
-					</p>
+
 					<div className='flex flex-col sm:flex-row gap-4 justify-center'>
 						<Button
 							className='bg-mystic-beige hover:bg-mystic-gold text-gray-800 font-montserrat font-semibold px-8 py-3 text-lg'
-							onClick={() =>
-								document.getElementById('productos')?.scrollIntoView({ behavior: 'smooth' })
+							onClick={
+								onShopNowClick ||
+								(() => document.getElementById('productos')?.scrollIntoView({ behavior: 'smooth' }))
 							}
 						>
 							Explorar Productos
@@ -50,7 +51,6 @@ const Hero: React.FC = () => {
 						<Button
 							variant='outline'
 							className='border-mystic-gold text-mystic-gold hover:bg-mystic-gold hover:text-gray-800 font-montserrat font-semibold px-8 py-3 text-lg'
-							onClick={() => navigate('/nuestra-historia')}
 						>
 							Nuestra Historia
 						</Button>

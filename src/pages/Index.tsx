@@ -1,88 +1,101 @@
 import React, { useState } from 'react'
-import { useProducts } from '../hooks/useProducts'
-import { useCart } from '../hooks/useCart'
-import Header from '../components/Header'
 import Hero from '../components/Hero'
 import ProductList from '../components/ProductList'
 import Cart from '../components/Cart'
-import { useToast } from '../hooks/use-toast'
+import Header from '../components/Header'
+import { useCart } from '../hooks/useCart'
+import { useProducts } from '../hooks/useProducts'
+import LoadingSpinner from '../components/LoadingSpinner'
+import ErrorMessage from '../components/ErrorMessage'
 
-const Index: React.FC = () => {
+const Index = () => {
 	const [isCartOpen, setIsCartOpen] = useState(false)
-	const { toast } = useToast()
+	const {
+		cartItems,
+		addToCart,
+		removeFromCart,
+		updateQuantity,
+		clearCart,
+		getTotalPrice,
+		getTotalItems,
+	} = useCart()
+	const { products, loading, error } = useProducts()
 
-	// Usar el hook personalizado para productos
-	const { products, loading, error, refetch } = useProducts()
+	if (loading) {
+		return <LoadingSpinner />
+	}
 
-	// Usar el hook personalizado para el carrito
-	const { cartItems, addToCart, updateQuantity, removeFromCart, getTotalItems } = useCart()
+	if (error) {
+		return <ErrorMessage message={error} />
+	}
 
-	const handleAddToCart = (product: any) => {
-		addToCart(product)
-
-		const existingItem = cartItems.find((item) => item.id === product.id)
-
-		if (existingItem) {
-			toast({
-				title: 'Producto actualizado',
-				description: `Se agregó otra unidad de ${product.name} al carrito`,
-			})
-		} else {
-			toast({
-				title: '¡Producto agregado!',
-				description: `${product.name} se ha agregado a tu carrito mágico`,
-			})
+	const handleAddToCart = (productId: string) => {
+		const product = products.find((p) => p.id === productId)
+		if (product) {
+			addToCart(product)
 		}
 	}
 
-	const handleRemoveFromCart = (id: number) => {
-		removeFromCart(id)
-		toast({
-			title: 'Producto eliminado',
-			description: 'El producto ha sido eliminado de tu carrito',
-			variant: 'destructive',
-		})
+	const handleViewProduct = (productId: string) => {
+		// Navigation logic for viewing individual product
+		console.log('View product:', productId)
+	}
+
+	const scrollToProducts = () => {
+		const element = document.getElementById('productos')
+		if (element) {
+			element.scrollIntoView({ behavior: 'smooth' })
+		}
 	}
 
 	return (
 		<div className='min-h-screen bg-white font-montserrat'>
 			<Header cartItems={cartItems} onCartClick={() => setIsCartOpen(true)} />
 
-			<Hero />
+			<main>
+				<Hero onShopNowClick={scrollToProducts} />
 
-			<div id='productos'>
-				<ProductList
-					products={products}
-					onAddToCart={handleAddToCart}
-					loading={loading}
-					error={error}
-					onRetry={refetch}
-				/>
-			</div>
+				<section id='productos' className='py-16 bg-gray-50'>
+					<div className='container mx-auto px-4'>
+						<h2 className='font-playfair text-3xl font-bold text-center text-gray-800 mb-12'>
+							Nuestros Productos
+						</h2>
+						<ProductList
+							products={products}
+							onAddToCart={handleAddToCart}
+							onViewProduct={handleViewProduct}
+						/>
+					</div>
+				</section>
+
+				{/* Contact Section */}
+				<section id='contacto' className='py-16 bg-mystic-lavender'>
+					<div className='container mx-auto px-4 text-center'>
+						<h2 className='font-playfair text-3xl font-bold text-gray-800 mb-8'>Contacto</h2>
+						<p className='font-montserrat text-gray-600 max-w-2xl mx-auto mb-8'>
+							¿Tienes alguna pregunta sobre nuestros productos místicos? Estamos aquí para ayudarte
+							en tu viaje espiritual.
+						</p>
+						<div className='space-y-4'>
+							<p className='font-montserrat text-gray-700'>📧 Email: info@universodual.com</p>
+							<p className='font-montserrat text-gray-700'>📱 WhatsApp: +54 9 11 1234-5678</p>
+							<p className='font-montserrat text-gray-700'>
+								🕐 Horarios: Lunes a Viernes 9:00 - 18:00
+							</p>
+						</div>
+					</div>
+				</section>
+			</main>
 
 			<Cart
-				cartItems={cartItems}
 				isOpen={isCartOpen}
 				onClose={() => setIsCartOpen(false)}
+				items={cartItems}
 				onUpdateQuantity={updateQuantity}
-				onRemoveItem={handleRemoveFromCart}
+				onRemoveItem={removeFromCart}
+				onClearCart={clearCart}
+				totalPrice={getTotalPrice()}
 			/>
-
-			{/* Footer */}
-			<footer className='bg-mystic-lavender py-5'>
-				<div className='container mx-auto px-4 text-center'>
-					<h3 className='font-playfair text-2xl font-bold text-gray-800 mb-2'>Universo Dual ✨</h3>
-					<p className='font-montserrat text-gray-600 mb-6'>
-						Conectando tu alma con la magia del universo⭐
-					</p>
-					<div className='flex justify-center space-x-6 text-sm text-gray-500 mb-2'>
-						<span> Universo Dual 2025 © Todos los derechos reservados</span>
-					</div>
-					<div className='flex justify-center space-x-6 text-sm text-gray-500'>
-						Creado por Jacqueline <div className='animate-bounce'>💖</div>
-					</div>
-				</div>
-			</footer>
 		</div>
 	)
 }

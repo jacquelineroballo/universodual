@@ -6,6 +6,8 @@ export interface Product {
 	description: string
 	category: 'velas' | 'inciensos' | 'cristales' | 'accesorios'
 	inStock: boolean
+	stock?: number
+	featured?: boolean
 }
 
 export interface CartItem extends Product {

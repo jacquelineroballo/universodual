@@ -1,104 +1,76 @@
 import { useState, useEffect } from 'react'
 import supabase from '@/integrations/supabase/client'
 import { Product } from '../types/Product'
+import { products as mockProducts } from '../data/products'
 
-interface UseProductsReturn {
-	products: Product[]
-	loading: boolean
-	error: string | null
-	refetch: () => void
-}
-
-export const useProducts = (): UseProductsReturn => {
+export const useProducts = () => {
 	const [products, setProducts] = useState<Product[]>([])
-	const [loading, setLoading] = useState<boolean>(true)
+	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState<string | null>(null)
-
-	const fetchProducts = async () => {
-		try {
-			setLoading(true)
-			setError(null)
-			console.log('Cargando productos desde Supabase...')
-
-			const { data, error: supabaseError } = await supabase
-				.from('products')
-				.select('*')
-				.order('created_at', { ascending: false })
-
-			if (supabaseError) {
-				throw supabaseError
-			}
-
-			// Transform the data to match our Product interface
-			const transformedProducts: Product[] = (data || []).map((item) => ({
-				id: item.id, // Keep as string (UUID)
-				name: item.name,
-				price: parseFloat(item.price) || 0,
-				image: item.image,
-				description: item.description,
-				category: item.category as 'velas' | 'inciensos' | 'cristales' | 'accesorios', // Type assertion
-				inStock: item.stock > 0,
-			}))
-
-			setProducts(transformedProducts)
-			console.log('Productos cargados exitosamente desde Supabase:', transformedProducts.length)
-		} catch (err) {
-			const errorMessage = err instanceof Error ? err.message : 'Error desconocido'
-			setError(errorMessage)
-			console.error('Error al cargar productos desde Supabase:', errorMessage)
-
-			// Fallback to mock data if Supabase fails
-			const mockProducts: Product[] = [
-				{
-					id: '1',
-					name: 'Vela de Lavanda Celestial',
-					price: 15.99,
-					image:
-						'https://images.unsplash.com/photo-1602874801006-dfbb91de7717?w=400&h=400&fit=crop',
-					description:
-						'Vela artesanal de lavanda para la relajación y paz interior. Elaborada con cera de soja natural.',
-					category: 'velas',
-					inStock: true,
-				},
-				{
-					id: '2',
-					name: 'Incienso de Sándalo Sagrado',
-					price: 8.5,
-					image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=400&fit=crop',
-					description: 'Incienso premium de sándalo para meditación y purificación energética.',
-					category: 'inciensos',
-					inStock: true,
-				},
-				{
-					id: '3',
-					name: 'Cristal de Amatista',
-					price: 25.0,
-					image:
-						'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=400&fit=crop',
-					description: 'Amatista natural para la protección espiritual y claridad mental.',
-					category: 'cristales',
-					inStock: true,
-				},
-			]
-			setProducts(mockProducts)
-			console.log('Usando productos mock como fallback')
-		} finally {
-			setLoading(false)
-		}
-	}
 
 	useEffect(() => {
 		fetchProducts()
 	}, [])
 
-	const refetch = () => {
-		fetchProducts()
+	const fetchProducts = async () => {
+		try {
+			setLoading(true)
+			const { data, error } = await supabase
+				.from('products')
+				.select('*')
+				.order('created_at', { ascending: false })
+
+			if (error) {
+				console.error('Error fetching products:', error)
+				// Fallback to mock data
+				setProducts(mockProducts)
+			} else if (data && data.length > 0) {
+				// Transform Supabase data to match Product interface
+				const transformedProducts: Product[] = data.map((item) => ({
+					id: item.id,
+					name: item.name,
+					price: parseFloat(item.price.toString()),
+					image: item.image,
+					description: item.description,
+					category: item.category as 'velas' | 'inciensos' | 'cristales' | 'accesorios',
+					inStock: item.stock > 0,
+					stock: item.stock,
+					featured: item.featured || false,
+				}))
+				setProducts(transformedProducts)
+			} else {
+				// Fallback to mock data if no products in database
+				setProducts(mockProducts)
+			}
+		} catch (err) {
+			console.error('Error in fetchProducts:', err)
+			setError('Error al cargar los productos')
+			// Fallback to mock data
+			setProducts(mockProducts)
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	const getProductById = (id: string) => {
+		return products.find((product) => product.id === id)
+	}
+
+	const getProductsByCategory = (category: string) => {
+		return products.filter((product) => product.category === category)
+	}
+
+	const getFeaturedProducts = () => {
+		return products.filter((product) => product.featured)
 	}
 
 	return {
 		products,
 		loading,
 		error,
-		refetch,
+		getProductById,
+		getProductsByCategory,
+		getFeaturedProducts,
+		refetch: fetchProducts,
 	}
 }
