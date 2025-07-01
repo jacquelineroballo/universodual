@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { supabase } from '@/integrations/supabase/client'
+import supabase from '@/integrations/supabase/client'
 import { Product } from '../types/Product'
 
 interface UseProductsReturn {
@@ -31,12 +31,12 @@ export const useProducts = (): UseProductsReturn => {
 
 			// Transform the data to match our Product interface
 			const transformedProducts: Product[] = (data || []).map((item) => ({
-				id: parseInt(item.id) || 0, // Convert UUID to number for compatibility
+				id: item.id, // Keep as string (UUID)
 				name: item.name,
 				price: parseFloat(item.price) || 0,
 				image: item.image,
 				description: item.description,
-				category: item.category,
+				category: item.category as 'velas' | 'inciensos' | 'cristales' | 'accesorios', // Type assertion
 				inStock: item.stock > 0,
 			}))
 
@@ -50,7 +50,7 @@ export const useProducts = (): UseProductsReturn => {
 			// Fallback to mock data if Supabase fails
 			const mockProducts: Product[] = [
 				{
-					id: 1,
+					id: '1',
 					name: 'Vela de Lavanda Celestial',
 					price: 15.99,
 					image:
@@ -61,7 +61,7 @@ export const useProducts = (): UseProductsReturn => {
 					inStock: true,
 				},
 				{
-					id: 2,
+					id: '2',
 					name: 'Incienso de Sándalo Sagrado',
 					price: 8.5,
 					image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=400&fit=crop',
@@ -70,7 +70,7 @@ export const useProducts = (): UseProductsReturn => {
 					inStock: true,
 				},
 				{
-					id: 3,
+					id: '3',
 					name: 'Cristal de Amatista',
 					price: 25.0,
 					image:
