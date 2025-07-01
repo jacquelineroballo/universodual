@@ -71,27 +71,14 @@ const Header: React.FC<HeaderProps> = ({ cartItems, onCartClick }) => {
 					</nav>
 
 					{/* Carrito */}
-					{/* <button
-						onClick={onCartClick}
-						className='relative bg-mystic-beige hover:bg-mystic-gold transition-colors p-2 rounded-full shadow-md'
-					>
-						<ShoppingCart className='w-4 h-4 text-gray-800' />
-						{totalItems > 0 && (
-							<span className='absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-montserrat font-semibold'>
-								{totalItems}
-							</span>
-						)}
-					</button> */}
-
 					<div className='flex items-center space-x-4'>
 						<AuthButton />
-
 						<Button
 							onClick={onCartClick}
-							className='bg-mystic-lavender hover:bg-mystic-rose text-gray-800 relative'
+							className='relative bg-mystic-beige hover:bg-mystic-gold transition-colors p-2 rounded-full shadow-md'
 							size='sm'
 						>
-							<ShoppingCart className='w-5 h-5' />
+							<ShoppingCart className='w-4 h-4 text-gray-800' />
 							{totalItems > 0 && (
 								<span className='absolute -top-2 -right-2 bg-mystic-gold text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold'>
 									{totalItems}
