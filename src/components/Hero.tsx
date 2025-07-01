@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button } from './ui/button'
+import { Link } from 'react-router-dom'
 
 interface HeroProps {
 	onShopNowClick?: () => void
@@ -48,12 +49,14 @@ const Hero: React.FC<HeroProps> = ({ onShopNowClick }) => {
 							Explorar Productos
 						</Button>
 
-						<Button
-							variant='outline'
-							className='border-mystic-gold text-mystic-gold hover:bg-mystic-gold hover:text-gray-800 font-montserrat font-semibold px-8 py-3 text-lg'
-						>
-							Nuestra Historia
-						</Button>
+						<Link to='/nuestra-historia'>
+							<Button
+								variant='outline'
+								className='border-mystic-gold text-mystic-gold hover:bg-mystic-gold hover:text-gray-800 font-montserrat font-semibold px-8 py-3 text-lg'
+							>
+								Nuestra Historia
+							</Button>
+						</Link>
 					</div>
 				</div>
 			</div>
