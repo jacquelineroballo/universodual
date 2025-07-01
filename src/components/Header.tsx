@@ -2,6 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { ShoppingCart, Star } from 'lucide-react'
 import { CartItem } from '../types/Product'
+import { Button } from './ui/button'
+import AuthButton from './AuthButton'
 
 interface HeaderProps {
 	cartItems: CartItem[]
@@ -10,6 +12,13 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ cartItems, onCartClick }) => {
 	const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0)
+
+	const scrollToProducts = () => {
+		const element = document.getElementById('productos')
+		if (element) {
+			element.scrollIntoView({ behavior: 'smooth' })
+		}
+	}
 
 	return (
 		<header className='bg-gradient-to-r from-mystic-lavender via-mystic-cream to-mystic-rose shadow-lg sticky top-0 z-50'>
@@ -62,7 +71,7 @@ const Header: React.FC<HeaderProps> = ({ cartItems, onCartClick }) => {
 					</nav>
 
 					{/* Carrito */}
-					<button
+					{/* <button
 						onClick={onCartClick}
 						className='relative bg-mystic-beige hover:bg-mystic-gold transition-colors p-2 rounded-full shadow-md'
 					>
@@ -72,7 +81,24 @@ const Header: React.FC<HeaderProps> = ({ cartItems, onCartClick }) => {
 								{totalItems}
 							</span>
 						)}
-					</button>
+					</button> */}
+
+					<div className='flex items-center space-x-4'>
+						<AuthButton />
+
+						<Button
+							onClick={onCartClick}
+							className='bg-mystic-lavender hover:bg-mystic-rose text-gray-800 relative'
+							size='sm'
+						>
+							<ShoppingCart className='w-5 h-5' />
+							{totalItems > 0 && (
+								<span className='absolute -top-2 -right-2 bg-mystic-gold text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold'>
+									{totalItems}
+								</span>
+							)}
+						</Button>
+					</div>
 				</div>
 			</div>
 		</header>
