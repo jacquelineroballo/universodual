@@ -23,4 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 bash.exe.stackdump
-src/integrations/supabase
+src/integrations/supabase/config.toml
+src/integrations/supabase/types.ts
+
