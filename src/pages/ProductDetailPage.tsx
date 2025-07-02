@@ -1,7 +1,7 @@
 import React from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useProducts } from '../hooks/useProducts'
-import { useCart } from '../hooks/useCart'
+import { useCarrito } from '../contexts/CarritoContext'
 import Header from '../components/Header'
 import LoadingSpinner from '../components/LoadingSpinner'
 import ErrorMessage from '../components/ErrorMessage'
@@ -14,9 +14,9 @@ const ProductDetailPage: React.FC = () => {
 	const { toast } = useToast()
 
 	const { products, loading, error, refetch } = useProducts()
-	const { cartItems, addToCart } = useCart()
+	const { cartItems, addToCart } = useCarrito()
 
-	const product = products.find((p) => p.id === id) // Changed from parseInt comparison
+	const product = products.find((p) => p.id === id)
 
 	const handleAddToCart = () => {
 		if (product) {

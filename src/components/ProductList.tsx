@@ -6,7 +6,7 @@ import ErrorMessage from './ErrorMessage'
 
 interface ProductListProps {
 	products: Product[]
-	onAddToCart: (productId: string) => void
+	onAddToCart: (product: Product) => void
 	onViewProduct?: (productId: string) => void
 	loading?: boolean
 	error?: string | null
@@ -52,7 +52,7 @@ const ProductList: React.FC<ProductListProps> = ({
 							<ProductCard
 								key={product.id}
 								product={product}
-								onAddToCart={() => onAddToCart(product.id)}
+								onAddToCart={() => onAddToCart(product)}
 								onViewProduct={onViewProduct ? () => onViewProduct(product.id) : undefined}
 							/>
 						))}
