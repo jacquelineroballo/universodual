@@ -5,9 +5,9 @@ import Cart from '../components/Cart'
 import Header from '../components/Header'
 import { useCarrito } from '../contexts/CarritoContext'
 import { useProducts } from '../hooks/useProducts'
+import { Product } from '../types/Product'
 import LoadingSpinner from '../components/LoadingSpinner'
 import ErrorMessage from '../components/ErrorMessage'
-import { Product } from '@/types/Product'
 
 const Index = () => {
 	const [isCartOpen, setIsCartOpen] = useState(false)
@@ -23,8 +23,11 @@ const Index = () => {
 		return <ErrorMessage message={error} />
 	}
 
-	const handleAddToCart = (product: Product) => {
-		addToCart(product)
+	const handleAddToCart = (productId: string) => {
+		const product = products.find((p) => p.id === productId)
+		if (product) {
+			addToCart(product)
+		}
 	}
 
 	const handleViewProduct = (productId: string) => {
