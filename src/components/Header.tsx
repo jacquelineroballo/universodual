@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ShoppingCart, Star } from 'lucide-react'
 import { CartItem } from '../types/Product'
 import { Button } from './ui/button'
@@ -11,12 +11,16 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ cartItems, onCartClick }) => {
+	const navigate = useNavigate()
 	const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0)
 
 	const scrollToProducts = () => {
 		const element = document.getElementById('productos')
 		if (element) {
 			element.scrollIntoView({ behavior: 'smooth' })
+		} else {
+			// If we're not on the homepage, navigate there and then scroll
+			navigate('/#productos')
 		}
 	}
 
@@ -51,6 +55,12 @@ const Header: React.FC<HeaderProps> = ({ cartItems, onCartClick }) => {
 							Nuestra Historia
 						</Link>
 						<Link
+							to='/contacto'
+							className='font-montserrat text-gray-600 hover:text-gray-800 transition-colors'
+						>
+							Contacto
+						</Link>
+						{/* <Link
 							to='/categoria/velas'
 							className='font-montserrat text-gray-700 hover:text-mystic-gold transition-colors'
 						>
@@ -67,7 +77,7 @@ const Header: React.FC<HeaderProps> = ({ cartItems, onCartClick }) => {
 							className='font-montserrat text-gray-700 hover:text-mystic-gold transition-colors'
 						>
 							Cristales
-						</Link>
+						</Link> */}
 					</nav>
 
 					{/* Carrito */}

@@ -13,6 +13,8 @@ import CheckoutPage from './pages/CheckoutPage'
 import CheckoutSuccessPage from './pages/CheckoutSuccessPage'
 import MyAccountPage from './pages/MyAccountPage'
 import NotFound from './pages/NotFound'
+import OurHistoryPage from './pages/OurHistoryPage'
+import ContactPage from './pages/ContactPage'
 
 const queryClient = new QueryClient()
 
@@ -32,6 +34,8 @@ const App = () => (
 							<Route path='/checkout' element={<CheckoutPage />} />
 							<Route path='/checkout-success' element={<CheckoutSuccessPage />} />
 							<Route path='/mi-cuenta' element={<MyAccountPage />} />
+							<Route path='/nuestra-historia' element={<OurHistoryPage />} />
+							<Route path='/contacto' element={<ContactPage />} />
 							{/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
 							<Route path='*' element={<NotFound />} />
 						</Routes>

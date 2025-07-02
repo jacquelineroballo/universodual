@@ -8,6 +8,7 @@ import { useProducts } from '../hooks/useProducts'
 import { Product } from '../types/Product'
 import LoadingSpinner from '../components/LoadingSpinner'
 import ErrorMessage from '../components/ErrorMessage'
+import { Link } from 'react-router-dom'
 
 const Index = () => {
 	const [isCartOpen, setIsCartOpen] = useState(false)
@@ -66,17 +67,12 @@ const Index = () => {
 				<section id='contacto' className='py-16 bg-mystic-lavender'>
 					<div className='container mx-auto px-4 text-center'>
 						<h2 className='font-playfair text-3xl font-bold text-gray-800 mb-8'>Contacto</h2>
-						<p className='font-montserrat text-gray-600 max-w-2xl mx-auto mb-8'>
-							¿Tienes alguna pregunta sobre nuestros productos místicos? Estamos aquí para ayudarte
-							en tu viaje espiritual.
-						</p>
-						<div className='space-y-4'>
-							<p className='font-montserrat text-gray-700'>📧 Email: info@universodual.com</p>
-							<p className='font-montserrat text-gray-700'>📱 WhatsApp: +54 9 11 1234-5678</p>
-							<p className='font-montserrat text-gray-700'>
-								🕐 Horarios: Lunes a Viernes 9:00 - 18:00
-							</p>
-						</div>
+						<Link
+							to='/contacto'
+							className='inline-block bg-gradient-to-r from-mystic-rose to-mystic-gold text-gray-800 font-montserrat font-semibold px-8 py-3 rounded-lg hover:shadow-lg transition-all duration-300 transform hover:scale-105'
+						>
+							Contáctanos
+						</Link>
 					</div>
 				</section>
 			</main>
