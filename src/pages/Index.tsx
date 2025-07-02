@@ -63,18 +63,29 @@ const Index = () => {
 					</div>
 				</section>
 
-				{/* Contact Section */}
-				<section id='contacto' className='py-16 bg-mystic-lavender'>
+				{/* Footer */}
+				<footer className='bg-mystic-lavender py-5'>
 					<div className='container mx-auto px-4 text-center'>
-						<h2 className='font-playfair text-3xl font-bold text-gray-800 mb-8'>Contacto</h2>
+						<h3 className='font-playfair text-2xl font-bold text-gray-800 mb-2'>
+							Universo Dual ✨
+						</h3>
+						<p className='font-montserrat text-gray-600 mb-6'>
+							Conectando tu alma con la magia del universo⭐
+						</p>
 						<Link
 							to='/contacto'
-							className='inline-block bg-gradient-to-r from-mystic-rose to-mystic-gold text-gray-800 font-montserrat font-semibold px-8 py-3 rounded-lg hover:shadow-lg transition-all duration-300 transform hover:scale-105'
+							className='inline-block btn-sm bg-gradient-to-r from-mystic-rose to-mystic-gold text-gray-800 font-montserrat font-semibold px-8 py-3 rounded-lg hover:shadow-lg transition-all duration-300 transform hover:scale-105'
 						>
 							Contáctanos
 						</Link>
+						<div className='flex justify-center space-x-6 text-sm text-gray-500 mb-2'>
+							<span> Universo Dual 2025 © Todos los derechos reservados</span>
+						</div>
+						<div className='flex justify-center space-x-6 text-sm text-gray-500'>
+							Creado por Jacqueline <div className='animate-bounce'>💖</div>
+						</div>
 					</div>
-				</section>
+				</footer>
 			</main>
 
 			<Cart
