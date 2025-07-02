@@ -21,7 +21,7 @@ const AuthButton: React.FC = () => {
 			<Button
 				onClick={() => navigate('/mi-cuenta')}
 				variant='ghost'
-				className='font-montserrat flex items-center gap-2'
+				className='font-montserrat flex items-center gap-2 bg-gradient-to-r from-mystic-lavender/30 to-mystic-rose/30 hover:from-mystic-lavender/50 hover:to-mystic-rose/50 text-gray-800 border border-mystic-gold/20 transition-all duration-300'
 			>
 				<User className='w-4 h-4' />
 				Mi Cuenta
@@ -32,11 +32,12 @@ const AuthButton: React.FC = () => {
 	return (
 		<Button
 			onClick={() => navigate('/auth')}
-			className='bg-mystic-beige hover:bg-mystic-gold transition-colors p-2 rounded-full shadow-md'
+			className='bg-gradient-to-r from-mystic-beige to-mystic-gold hover:from-mystic-gold hover:to-mystic-rose text-gray-800 font-montserrat transition-all duration-300 shadow-md hover:shadow-lg'
 		>
 			Iniciar Sesión
 		</Button>
 	)
+    >
 }
 
 export default AuthButton

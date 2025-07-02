@@ -35,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({ cartItems, onCartClick }) => {
 						</div>
 						<div className='text-center'>
 							<h1 className='font-playfair text-2xl md:text-3xl font-bold text-gray-800'>
-								UNIVERSO DUAL
+								Universo Dual
 							</h1>
 						</div>
 					</Link>
@@ -56,28 +56,10 @@ const Header: React.FC<HeaderProps> = ({ cartItems, onCartClick }) => {
 						</Link>
 						<Link
 							to='/contacto'
-							className='font-montserrat text-gray-600 hover:text-gray-800 transition-colors'
+							className='font-montserrat text-gray-700 hover:text-mystic-gold transition-colors'
 						>
 							Contacto
 						</Link>
-						{/* <Link
-							to='/categoria/velas'
-							className='font-montserrat text-gray-700 hover:text-mystic-gold transition-colors'
-						>
-							Velas
-						</Link>
-						<Link
-							to='/categoria/inciensos'
-							className='font-montserrat text-gray-700 hover:text-mystic-gold transition-colors'
-						>
-							Inciensos
-						</Link>
-						<Link
-							to='/categoria/cristales'
-							className='font-montserrat text-gray-700 hover:text-mystic-gold transition-colors'
-						>
-							Cristales
-						</Link> */}
 					</nav>
 
 					{/* Carrito */}

@@ -8,7 +8,7 @@ interface HeroProps {
 
 const Hero: React.FC<HeroProps> = ({ onShopNowClick }) => {
 	return (
-		<section className='relative bg-gradient-to-br from-mystic-lavender via-mystic-cream to-mystic-rose min-h-[70vh] flex items-center'>
+		<section className='relative bg-gradient-to-br from-mystic-lavender via-mystic-cream to-mystic-rose min-h-screen flex items-center'>
 			{/* Elementos decorativos flotantes */}
 			<div className='absolute inset-0 overflow-hidden'>
 				<div className='absolute top-20 left-10 w-4 h-4 bg-mystic-gold rounded-full animate-float opacity-60'></div>
