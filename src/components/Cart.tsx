@@ -2,6 +2,7 @@ import React from 'react'
 import { X, Plus, Minus, ShoppingBag } from 'lucide-react'
 import { CartItem } from '../types/Product'
 import { Button } from './ui/button'
+import { useNavigate } from 'react-router-dom'
 
 interface CartProps {
 	isOpen: boolean
@@ -22,6 +23,13 @@ const Cart: React.FC<CartProps> = ({
 	onClearCart,
 	totalPrice,
 }) => {
+	const navigate = useNavigate()
+
+	const handleCheckout = () => {
+		onClose() // Close the cart
+		navigate('/checkout') // Navigate to checkout page
+	}
+
 	if (!isOpen) return null
 
 	return (
@@ -106,10 +114,7 @@ const Cart: React.FC<CartProps> = ({
 						</div>
 
 						<Button
-							onClick={() => {
-								// TODO: Implement checkout functionality
-								console.log('Checkout clicked')
-							}}
+							onClick={handleCheckout}
 							className='w-full bg-mystic-beige hover:bg-mystic-gold text-gray-800 font-montserrat font-semibold'
 						>
 							Proceder al Pago
