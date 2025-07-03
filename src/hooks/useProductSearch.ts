@@ -8,13 +8,16 @@ export const useProductSearch = (products: Product[], itemsPerPage: number = 12)
 
 	// Filtrar productos basado en búsqueda y categoría
 	const filteredProducts = useMemo(() => {
+		if (!products || products.length === 0) return []
+
 		return products.filter((product) => {
 			const matchesSearch =
+				searchTerm === '' ||
 				product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
 				product.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
 				product.category.toLowerCase().includes(searchTerm.toLowerCase())
 
-			const matchesCategory = !selectedCategory || product.category === selectedCategory
+			const matchesCategory = selectedCategory === '' || product.category === selectedCategory
 
 			return matchesSearch && matchesCategory
 		})

@@ -55,6 +55,12 @@ const Header: React.FC<HeaderProps> = ({ cartItems, onCartClick }) => {
 							Nuestra Historia
 						</Link>
 						<Link
+							to='/productos'
+							className='font-montserrat text-gray-600 hover:text-gray-800 transition-colors'
+						>
+							Catálogo
+						</Link>
+						<Link
 							to='/contacto'
 							className='font-montserrat text-gray-700 hover:text-mystic-gold transition-colors'
 						>
