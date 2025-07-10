@@ -21,40 +21,7 @@ export const mockApi = {
 
 			if (!response.ok) {
 				console.error('API request failed:', response.status, response.statusText)
-				// Si falla, devolvemos productos de ejemplo para que la vista funcione
-				console.log('Returning sample products for demo')
-				return [
-					{
-						id: '1',
-						name: 'Cristal de Cuarzo',
-						description: 'Cristal de cuarzo natural para meditación y equilibrio energético.',
-						price: 25.99,
-						image: '/placeholder.svg',
-						category: 'cristales',
-						stock: 10,
-						featured: true,
-					},
-					{
-						id: '2',
-						name: 'Vela Aromática Lavanda',
-						description: 'Vela natural con aceite esencial de lavanda para relajación.',
-						price: 15.5,
-						image: '/placeholder.svg',
-						category: 'velas',
-						stock: 20,
-						featured: false,
-					},
-					{
-						id: '3',
-						name: 'Incienso de Sándalo',
-						description: 'Incienso premium de sándalo para purificación del ambiente.',
-						price: 8.99,
-						image: '/placeholder.svg',
-						category: 'inciensos',
-						stock: 15,
-						featured: true,
-					},
-				]
+				throw new Error(`Error al obtener productos: ${response.status}`)
 			}
 
 			const data = await response.json()
@@ -62,40 +29,7 @@ export const mockApi = {
 			return data
 		} catch (error) {
 			console.error('Error fetching products:', error)
-			// En caso de error de red, también devolvemos productos de ejemplo
-			console.log('Network error, returning sample products')
-			return [
-				{
-					id: '1',
-					name: 'Cristal de Cuarzo',
-					description: 'Cristal de cuarzo natural para meditación y equilibrio energético.',
-					price: 25.99,
-					image: '/placeholder.svg',
-					category: 'cristales',
-					stock: 10,
-					featured: true,
-				},
-				{
-					id: '2',
-					name: 'Vela Aromática Lavanda',
-					description: 'Vela natural con aceite esencial de lavanda para relajación.',
-					price: 15.5,
-					image: '/placeholder.svg',
-					category: 'velas',
-					stock: 20,
-					featured: false,
-				},
-				{
-					id: '3',
-					name: 'Incienso de Sándalo',
-					description: 'Incienso premium de sándalo para purificación del ambiente.',
-					price: 8.99,
-					image: '/placeholder.svg',
-					category: 'inciensos',
-					stock: 15,
-					featured: true,
-				},
-			]
+			throw error
 		}
 	},
 
@@ -123,7 +57,7 @@ export const mockApi = {
 			return data
 		} catch (error) {
 			console.error('Error creating product:', error)
-			throw new Error('No se pudo crear el producto. Verifica la conexión a internet.')
+			throw error
 		}
 	},
 
@@ -151,7 +85,7 @@ export const mockApi = {
 			return data
 		} catch (error) {
 			console.error('Error updating product:', error)
-			throw new Error('No se pudo actualizar el producto. Verifica la conexión a internet.')
+			throw error
 		}
 	},
 
@@ -172,7 +106,7 @@ export const mockApi = {
 			console.log('Product deleted successfully')
 		} catch (error) {
 			console.error('Error deleting product:', error)
-			throw new Error('No se pudo eliminar el producto. Verifica la conexión a internet.')
+			throw error
 		}
 	},
 }
