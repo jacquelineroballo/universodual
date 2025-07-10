@@ -17,7 +17,7 @@ interface FormData {
 	name: string
 	price: string
 	description: string
-	category: 'velas' | 'inciensos' | 'cristales' | 'accesorios'
+	category: string
 	image: string
 	stock: string
 	featured: boolean
@@ -175,9 +175,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
 				<Label htmlFor='category'>Categoría</Label>
 				<Select
 					value={formData.category}
-					onValueChange={(value: 'velas' | 'inciensos' | 'cristales' | 'accesorios') =>
-						handleInputChange('category', value)
-					}
+					onValueChange={(value: string) => handleInputChange('category', value)}
 				>
 					<SelectTrigger>
 						<SelectValue />

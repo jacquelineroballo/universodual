@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react'
-import { mockApiService, MockProduct } from '../services/mockApi'
+import { mockApi, MockProduct } from '../services/mockApi'
 import { useToast } from '../hooks/use-toast'
 
 interface ProductsContextType {
@@ -41,7 +41,7 @@ export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) 
 		try {
 			setLoading(true)
 			setError(null)
-			const fetchedProducts = await mockApiService.getProducts()
+			const fetchedProducts = await mockApi.getProducts()
 			setProducts(fetchedProducts)
 		} catch (err) {
 			const errorMessage = err instanceof Error ? err.message : 'Error desconocido'
@@ -61,7 +61,7 @@ export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) 
 			try {
 				setLoading(true)
 				setError(null)
-				const newProduct = await mockApiService.createProduct(productData)
+				const newProduct = await mockApi.createProduct(productData)
 				setProducts((prev) => [...prev, newProduct])
 				toast({
 					title: '¡Éxito!',
@@ -88,7 +88,7 @@ export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) 
 			try {
 				setLoading(true)
 				setError(null)
-				const updatedProduct = await mockApiService.updateProduct(id, productData)
+				const updatedProduct = await mockApi.updateProduct(id, productData)
 				setProducts((prev) => prev.map((p) => (p.id === id ? updatedProduct : p)))
 				toast({
 					title: '¡Éxito!',
@@ -115,7 +115,7 @@ export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) 
 			try {
 				setLoading(true)
 				setError(null)
-				await mockApiService.deleteProduct(id)
+				await mockApi.deleteProduct(id)
 				setProducts((prev) => prev.filter((p) => p.id !== id))
 				toast({
 					title: '¡Éxito!',

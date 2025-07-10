@@ -1,4 +1,4 @@
-const MOCK_API_URL = 'https://6866c01a89803950dbb3c66f.mockapi.io/api/v1'
+const MOCK_API_URL = 'https://6866c01a89803950dbb3c66f.mockapi.io/universodual'
 
 export interface MockProduct {
 	id: string
@@ -17,20 +17,11 @@ export const mockApi = {
 		try {
 			console.log('Fetching products from:', `${MOCK_API_URL}/products`)
 
-			// Primero intentamos con el endpoint estándar
-			let response = await fetch(`${MOCK_API_URL}/products`)
-
-			// Si no funciona, intentamos sin /api/v1
-			if (!response.ok) {
-				console.log('First attempt failed, trying alternative endpoint...')
-				const alternativeUrl = 'https://6866c01a89803950dbb3c66f.mockapi.io/products'
-				console.log('Trying:', alternativeUrl)
-				response = await fetch(alternativeUrl)
-			}
+			const response = await fetch(`${MOCK_API_URL}/products`)
 
 			if (!response.ok) {
-				console.error('Both endpoints failed:', response.status, response.statusText)
-				// Si ambos fallan, devolvemos productos de ejemplo para que la vista funcione
+				console.error('API request failed:', response.status, response.statusText)
+				// Si falla, devolvemos productos de ejemplo para que la vista funcione
 				console.log('Returning sample products for demo')
 				return [
 					{
@@ -39,7 +30,7 @@ export const mockApi = {
 						description: 'Cristal de cuarzo natural para meditación y equilibrio energético.',
 						price: 25.99,
 						image: '/placeholder.svg',
-						category: 'Cristales',
+						category: 'cristales',
 						stock: 10,
 						featured: true,
 					},
@@ -49,7 +40,7 @@ export const mockApi = {
 						description: 'Vela natural con aceite esencial de lavanda para relajación.',
 						price: 15.5,
 						image: '/placeholder.svg',
-						category: 'Velas',
+						category: 'velas',
 						stock: 20,
 						featured: false,
 					},
@@ -70,7 +61,7 @@ export const mockApi = {
 					description: 'Cristal de cuarzo natural para meditación y equilibrio energético.',
 					price: 25.99,
 					image: '/placeholder.svg',
-					category: 'Cristales',
+					category: 'cristales',
 					stock: 10,
 					featured: true,
 				},
@@ -80,7 +71,7 @@ export const mockApi = {
 					description: 'Vela natural con aceite esencial de lavanda para relajación.',
 					price: 15.5,
 					image: '/placeholder.svg',
-					category: 'Velas',
+					category: 'velas',
 					stock: 20,
 					featured: false,
 				},
@@ -93,25 +84,13 @@ export const mockApi = {
 		try {
 			console.log('Creating product:', product)
 
-			let response = await fetch(`${MOCK_API_URL}/products`, {
+			const response = await fetch(`${MOCK_API_URL}/products`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify(product),
 			})
-
-			// Intentar endpoint alternativo si falla
-			if (!response.ok) {
-				const alternativeUrl = 'https://6866c01a89803950dbb3c66f.mockapi.io/products'
-				response = await fetch(alternativeUrl, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify(product),
-				})
-			}
 
 			if (!response.ok) {
 				throw new Error(`Error al crear producto: ${response.statusText}`)
@@ -131,25 +110,13 @@ export const mockApi = {
 		try {
 			console.log('Updating product:', id, product)
 
-			let response = await fetch(`${MOCK_API_URL}/products/${id}`, {
+			const response = await fetch(`${MOCK_API_URL}/products/${id}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify(product),
 			})
-
-			// Intentar endpoint alternativo si falla
-			if (!response.ok) {
-				const alternativeUrl = `https://6866c01a89803950dbb3c66f.mockapi.io/products/${id}`
-				response = await fetch(alternativeUrl, {
-					method: 'PUT',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify(product),
-				})
-			}
 
 			if (!response.ok) {
 				throw new Error(`Error al actualizar producto: ${response.statusText}`)
@@ -169,17 +136,9 @@ export const mockApi = {
 		try {
 			console.log('Deleting product:', id)
 
-			let response = await fetch(`${MOCK_API_URL}/products/${id}`, {
+			const response = await fetch(`${MOCK_API_URL}/products/${id}`, {
 				method: 'DELETE',
 			})
-
-			// Intentar endpoint alternativo si falla
-			if (!response.ok) {
-				const alternativeUrl = `https://6866c01a89803950dbb3c66f.mockapi.io/products/${id}`
-				response = await fetch(alternativeUrl, {
-					method: 'DELETE',
-				})
-			}
 
 			if (!response.ok) {
 				throw new Error(`Error al eliminar producto: ${response.statusText}`)
