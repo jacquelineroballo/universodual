@@ -7,7 +7,9 @@ import { Input } from '../components/ui/input'
 import { useToast } from '../hooks/use-toast'
 import { User, MapPin, Phone, Mail, ArrowLeft } from 'lucide-react'
 import Header from '../components/Header'
-import { useCart } from '../hooks/useCart'
+import { useCarrito } from '../contexts/CarritoContext'
+import LoadingSpinner from '../components/LoadingSpinner'
+import ErrorMessage from '../components/ErrorMessage'
 
 interface Profile {
 	id: string
@@ -17,19 +19,20 @@ interface Profile {
 	shipping_address: string | null
 	phone: string | null
 	city: string | null
-	postal_code: string | null
+	postal_code: number | null
 }
 
 const MyAccountPage: React.FC = () => {
 	const { user, loading: authLoading, signOut } = useAuth()
 	const navigate = useNavigate()
 	const { toast } = useToast()
-	const { cartItems } = useCart()
+	const { cartItems } = useCarrito()
 
 	const [profile, setProfile] = useState<Profile | null>(null)
 	const [loading, setLoading] = useState(true)
 	const [saving, setSaving] = useState(false)
 	const [isEditing, setIsEditing] = useState(false)
+	const [error, setError] = useState<string | null>(null)
 
 	const [formData, setFormData] = useState({
 		full_name: '',
@@ -39,32 +42,46 @@ const MyAccountPage: React.FC = () => {
 		postal_code: '',
 	})
 
+	console.log('MyAccountPage: Rendering with user:', user?.email, 'authLoading:', authLoading)
+
 	// Redirect if not authenticated
 	useEffect(() => {
+		console.log('MyAccountPage: Auth check - user:', user?.email, 'authLoading:', authLoading)
 		if (!authLoading && !user) {
+			console.log('MyAccountPage: Redirecting to auth')
 			navigate('/auth')
 		}
 	}, [user, authLoading, navigate])
 
 	// Load user profile
 	useEffect(() => {
-		if (user) {
+		if (user && !authLoading) {
+			console.log('MyAccountPage: Loading profile for user:', user.email)
 			loadProfile()
 		}
-	}, [user])
+	}, [user, authLoading])
 
 	const loadProfile = async () => {
-		if (!user) return
+		if (!user) {
+			console.log('MyAccountPage: No user, skipping profile load')
+			setLoading(false)
+			return
+		}
 
 		try {
+			console.log('MyAccountPage: Fetching profile for user ID:', user.id)
 			setLoading(true)
+			setError(null)
+
 			const { data, error } = await supabase.from('profiles').select('*').eq('id', user.id).single()
 
 			if (error && error.code !== 'PGRST116') {
+				console.error('MyAccountPage: Profile fetch error:', error)
 				throw error
 			}
 
 			if (data) {
+				console.log('MyAccountPage: Profile loaded successfully')
 				const profileData: Profile = {
 					id: data.id,
 					email: data.email,
@@ -82,16 +99,33 @@ const MyAccountPage: React.FC = () => {
 					shipping_address: profileData.shipping_address || '',
 					phone: profileData.phone || '',
 					city: profileData.city || '',
-					postal_code: profileData.postal_code || '',
+					postal_code: profileData.postal_code?.toString() || '',
+				})
+			} else {
+				console.log('MyAccountPage: No profile found, using user data')
+				// Create basic profile from user data
+				const basicProfile: Profile = {
+					id: user.id,
+					email: user.email,
+					full_name: user.user_metadata?.full_name || null,
+					avatar_url: null,
+					shipping_address: null,
+					phone: null,
+					city: null,
+					postal_code: null,
+				}
+				setProfile(basicProfile)
+				setFormData({
+					full_name: basicProfile.full_name || '',
+					shipping_address: '',
+					phone: '',
+					city: '',
+					postal_code: '',
 				})
 			}
 		} catch (error) {
-			console.error('Error loading profile:', error)
-			toast({
-				title: 'Error',
-				description: 'No se pudo cargar la información del perfil',
-				variant: 'destructive',
-			})
+			console.error('MyAccountPage: Error loading profile:', error)
+			setError('No se pudo cargar la información del perfil')
 		} finally {
 			setLoading(false)
 		}
@@ -105,7 +139,11 @@ const MyAccountPage: React.FC = () => {
 			const { error } = await supabase.from('profiles').upsert({
 				id: user.id,
 				email: user.email,
-				...formData,
+				full_name: formData.full_name,
+				shipping_address: formData.shipping_address,
+				phone: formData.phone,
+				city: formData.city,
+				postal_code: formData.postal_code ? parseInt(formData.postal_code) : null,
 				updated_at: new Date().toISOString(),
 			})
 
@@ -135,21 +173,36 @@ const MyAccountPage: React.FC = () => {
 		navigate('/')
 	}
 
-	if (authLoading || loading) {
+	if (authLoading) {
 		return (
 			<div className='min-h-screen bg-white font-montserrat'>
 				<Header cartItems={cartItems} onCartClick={() => {}} />
-				<div className='flex items-center justify-center py-12'>
-					<div className='text-center'>
-						<div className='animate-spin rounded-full h-12 w-12 border-b-2 border-mystic-gold mx-auto mb-4'></div>
-						<p className='text-gray-600'>Cargando...</p>
-					</div>
-				</div>
+				<LoadingSpinner />
 			</div>
 		)
 	}
 
-	if (!user) return null
+	if (!user) {
+		return null
+	}
+
+	if (loading) {
+		return (
+			<div className='min-h-screen bg-white font-montserrat'>
+				<Header cartItems={cartItems} onCartClick={() => {}} />
+				<LoadingSpinner />
+			</div>
+		)
+	}
+
+	if (error) {
+		return (
+			<div className='min-h-screen bg-white font-montserrat'>
+				<Header cartItems={cartItems} onCartClick={() => {}} />
+				<ErrorMessage message={error} onRetry={loadProfile} />
+			</div>
+		)
+	}
 
 	return (
 		<div className='min-h-screen bg-gradient-to-br from-mystic-lavender/20 to-mystic-cream/20 font-montserrat'>
@@ -312,7 +365,7 @@ const MyAccountPage: React.FC = () => {
 													shipping_address: profile?.shipping_address || '',
 													phone: profile?.phone || '',
 													city: profile?.city || '',
-													postal_code: profile?.postal_code || '',
+													postal_code: profile?.postal_code?.toString() || '',
 												})
 											}}
 											variant='outline'

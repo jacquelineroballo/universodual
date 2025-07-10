@@ -8,6 +8,8 @@ const AuthButton: React.FC = () => {
 	const { user, loading } = useAuth()
 	const navigate = useNavigate()
 
+	console.log('AuthButton: Rendering with user:', user?.email, 'loading:', loading)
+
 	if (loading) {
 		return (
 			<Button variant='ghost' disabled className='font-montserrat'>
@@ -21,7 +23,7 @@ const AuthButton: React.FC = () => {
 			<Button
 				onClick={() => navigate('/mi-cuenta')}
 				variant='ghost'
-				className='font-montserrat flex items-center gap-2'
+				className='font-montserrat flex items-center gap-2 bg-gradient-to-r from-mystic-lavender/30 to-mystic-rose/30 hover:from-mystic-lavender/50 hover:to-mystic-rose/50 text-gray-800 border border-mystic-gold/20 transition-all duration-300'
 			>
 				<User className='w-4 h-4' />
 				Mi Cuenta
