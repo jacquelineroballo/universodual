@@ -5,6 +5,7 @@ import { Input } from './ui/input'
 import { Textarea } from './ui/textarea'
 import { Label } from './ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
+import ImageUpload from './ImageUpload'
 
 interface ProductFormProps {
 	product?: MockProduct
@@ -66,31 +67,26 @@ const ProductForm: React.FC<ProductFormProps> = ({
 	const validateForm = (): boolean => {
 		const newErrors: FormErrors = {}
 
-		// Validar nombre (obligatorio)
 		if (!formData.name.trim()) {
 			newErrors.name = 'El nombre es obligatorio'
 		}
 
-		// Validar precio (mayor a 0)
 		const price = parseFloat(formData.price)
 		if (!formData.price || isNaN(price) || price <= 0) {
 			newErrors.price = 'El precio debe ser mayor a 0'
 		}
 
-		// Validar descripción (mínimo 10 caracteres)
 		if (!formData.description.trim() || formData.description.trim().length < 10) {
 			newErrors.description = 'La descripción debe tener al menos 10 caracteres'
 		}
 
-		// Validar stock
 		const stock = parseInt(formData.stock)
 		if (!formData.stock || isNaN(stock) || stock < 0) {
 			newErrors.stock = 'El stock debe ser un número válido mayor o igual a 0'
 		}
 
-		// Validar imagen (URL básica)
 		if (!formData.image.trim()) {
-			newErrors.image = 'La URL de la imagen es obligatoria'
+			newErrors.image = 'La imagen es obligatoria'
 		}
 
 		setErrors(newErrors)
@@ -189,17 +185,11 @@ const ProductForm: React.FC<ProductFormProps> = ({
 				</Select>
 			</div>
 
-			<div className='space-y-2'>
-				<Label htmlFor='image'>URL de la Imagen *</Label>
-				<Input
-					id='image'
-					value={formData.image}
-					onChange={(e) => handleInputChange('image', e.target.value)}
-					placeholder='https://ejemplo.com/imagen.jpg'
-					className={errors.image ? 'border-red-500' : ''}
-				/>
-				{errors.image && <p className='text-sm text-red-500'>{errors.image}</p>}
-			</div>
+			<ImageUpload
+				value={formData.image}
+				onChange={(value) => handleInputChange('image', value)}
+				error={errors.image}
+			/>
 
 			<div className='space-y-2'>
 				<Label htmlFor='stock'>Stock *</Label>

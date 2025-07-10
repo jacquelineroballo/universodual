@@ -88,7 +88,19 @@ export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) 
 			try {
 				setLoading(true)
 				setError(null)
-				const updatedProduct = await mockApi.updateProduct(id, productData)
+
+				// Prepare the complete product data for the API
+				const currentProduct = products.find((p) => p.id === id)
+				if (!currentProduct) {
+					throw new Error('Producto no encontrado')
+				}
+
+				const completeProductData = {
+					...currentProduct,
+					...productData,
+				}
+
+				const updatedProduct = await mockApi.updateProduct(id, completeProductData)
 				setProducts((prev) => prev.map((p) => (p.id === id ? updatedProduct : p)))
 				toast({
 					title: '¡Éxito!',
@@ -107,7 +119,7 @@ export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) 
 				setLoading(false)
 			}
 		},
-		[toast]
+		[toast, products]
 	)
 
 	const deleteProduct = useCallback(
