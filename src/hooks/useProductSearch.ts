@@ -1,7 +1,7 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { Product } from '../types/Product'
 
-export const useProductSearch = (products: Product[], itemsPerPage: number = 12) => {
+export const useProductSearch = (products: Product[], itemsPerPage: number = 4) => {
 	const [searchTerm, setSearchTerm] = useState('')
 	const [currentPage, setCurrentPage] = useState(1)
 	const [selectedCategory, setSelectedCategory] = useState<string>('')
@@ -30,21 +30,21 @@ export const useProductSearch = (products: Product[], itemsPerPage: number = 12)
 	const paginatedProducts = filteredProducts.slice(startIndex, endIndex)
 
 	// Reset página cuando cambian los filtros
-	const handleSearchChange = (term: string) => {
+	const handleSearchChange = useCallback((term: string) => {
 		setSearchTerm(term)
 		setCurrentPage(1)
-	}
+	}, [])
 
-	const handleCategoryChange = (category: string) => {
+	const handleCategoryChange = useCallback((category: string) => {
 		setSelectedCategory(category)
 		setCurrentPage(1)
-	}
+	}, [])
 
-	const handlePageChange = (page: number) => {
+	const handlePageChange = useCallback((page: number) => {
 		setCurrentPage(page)
 		// Scroll to top when changing pages
 		window.scrollTo({ top: 0, behavior: 'smooth' })
-	}
+	}, [])
 
 	return {
 		searchTerm,

@@ -5,15 +5,22 @@ import ProductList from '../components/ProductList'
 import Cart from '../components/Cart'
 import Header from '../components/Header'
 import SEO from '../components/SEO'
-import { useCarrito } from '../contexts/CarritoContext'
+import { useOptimizedCart } from '../hooks/useOptimizedCart'
 import { useProducts } from '../hooks/useProducts'
 import LoadingSpinner from '../components/LoadingSpinner'
 import ErrorMessage from '../components/ErrorMessage'
 
 const Index = () => {
-	const [isCartOpen, setIsCartOpen] = useState(false)
-	const { cartItems, addToCart, removeFromCart, updateQuantity, clearCart, getTotalPrice } =
-		useCarrito()
+	const {
+		cartItems,
+		addToCart,
+		removeFromCart,
+		updateQuantity,
+		clearCart,
+		totalPrice,
+		isCartOpen,
+		setCartOpen,
+	} = useOptimizedCart()
 	const { products, loading, error } = useProducts()
 
 	if (loading) {
@@ -32,13 +39,6 @@ const Index = () => {
 				<ErrorMessage message={error} />
 			</>
 		)
-	}
-
-	const handleAddToCart = (productId: string) => {
-		const product = products.find((p) => p.id === productId)
-		if (product) {
-			addToCart(product)
-		}
 	}
 
 	const handleViewProduct = (productId: string) => {
@@ -60,7 +60,7 @@ const Index = () => {
 		<>
 			<SEO />
 			<div className='min-h-screen bg-white font-montserrat'>
-				<Header cartItems={cartItems} onCartClick={() => setIsCartOpen(true)} />
+				<Header cartItems={cartItems} onCartClick={() => setCartOpen(true)} />
 
 				<main role='main'>
 					<Hero onShopNowClick={scrollToProducts} />
@@ -79,11 +79,7 @@ const Index = () => {
 								</p>
 							</div>
 
-							<ProductList
-								products={displayProducts}
-								onAddToCart={handleAddToCart}
-								onViewProduct={handleViewProduct}
-							/>
+							<ProductList products={displayProducts} onViewProduct={handleViewProduct} />
 
 							<div className='text-center mt-12'>
 								<Link
@@ -114,7 +110,7 @@ const Index = () => {
 								className='inline-block bg-gradient-to-r from-mystic-rose to-mystic-gold text-gray-800 font-montserrat font-semibold px-8 py-3 rounded-lg hover:shadow-lg transition-all duration-300 transform hover:scale-105'
 								aria-label='Ir a la página de contacto'
 							>
-								Contáctanos
+								Contactanos
 							</Link>
 						</div>
 					</section>
@@ -122,12 +118,12 @@ const Index = () => {
 
 				<Cart
 					isOpen={isCartOpen}
-					onClose={() => setIsCartOpen(false)}
+					onClose={() => setCartOpen(false)}
 					items={cartItems}
 					onUpdateQuantity={updateQuantity}
 					onRemoveItem={removeFromCart}
 					onClearCart={clearCart}
-					totalPrice={getTotalPrice()}
+					totalPrice={totalPrice}
 				/>
 			</div>
 		</>
