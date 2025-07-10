@@ -6,7 +6,7 @@ import Cart from '../components/Cart'
 import Header from '../components/Header'
 import SEO from '../components/SEO'
 import { useCarrito } from '../contexts/CarritoContext'
-import { useProducts } from '../hooks/useProducts'
+import { useProducts } from '../contexts/ProductsContext'
 import LoadingSpinner from '../components/LoadingSpinner'
 import ErrorMessage from '../components/ErrorMessage'
 
@@ -14,7 +14,7 @@ const Index = () => {
 	const [isCartOpen, setIsCartOpen] = useState(false)
 	const { cartItems, addToCart, removeFromCart, updateQuantity, clearCart, getTotalPrice } =
 		useCarrito()
-	const { products, loading, error } = useProducts()
+	const { products, loading, error, fetchProducts } = useProducts()
 
 	if (loading) {
 		return (
@@ -29,7 +29,7 @@ const Index = () => {
 		return (
 			<>
 				<SEO />
-				<ErrorMessage message={error} />
+				<ErrorMessage message={error} onRetry={fetchProducts} />
 			</>
 		)
 	}
@@ -37,7 +37,19 @@ const Index = () => {
 	const handleAddToCart = (productId: string) => {
 		const product = products.find((p) => p.id === productId)
 		if (product) {
-			addToCart(product)
+			// Transform MockProduct to Product for cart
+			const cartProduct = {
+				id: product.id,
+				name: product.name,
+				price: product.price,
+				image: product.image,
+				description: product.description,
+				category: product.category as 'velas' | 'inciensos' | 'cristales' | 'accesorios',
+				inStock: product.stock > 0,
+				stock: product.stock,
+				featured: product.featured,
+			}
+			addToCart(cartProduct)
 		}
 	}
 
@@ -52,9 +64,23 @@ const Index = () => {
 		}
 	}
 
-	// Show only featured products or first 8 products for homepage
-	const featuredProducts = products.filter((p) => p.featured).slice(0, 8)
-	const displayProducts = featuredProducts.length > 0 ? featuredProducts : products.slice(0, 8)
+	// Transform MockProducts to Products for display
+	const displayProducts = products.map((product) => ({
+		id: product.id,
+		name: product.name,
+		price: product.price,
+		image: product.image,
+		description: product.description,
+		category: product.category as 'velas' | 'inciensos' | 'cristales' | 'accesorios',
+		inStock: product.stock > 0,
+		stock: product.stock,
+		featured: product.featured,
+	}))
+
+	// Show featured products first, then others, limit to 8 for homepage
+	const featuredProducts = displayProducts.filter((p) => p.featured)
+	const otherProducts = displayProducts.filter((p) => !p.featured)
+	const productsToShow = [...featuredProducts, ...otherProducts].slice(0, 8)
 
 	return (
 		<>
@@ -72,28 +98,33 @@ const Index = () => {
 									id='productos-heading'
 									className='font-playfair text-3xl font-bold text-gray-800 mb-4'
 								>
-									Productos Destacados
+									Nuestros Productos
 								</h2>
 								<p className='font-montserrat text-gray-600 max-w-2xl mx-auto mb-8'>
-									Descubre nuestra selección especial de productos más populares
+									Descubre nuestra colección completa de productos místicos y espirituales
 								</p>
 							</div>
 
 							<ProductList
-								products={displayProducts}
+								products={productsToShow}
 								onAddToCart={handleAddToCart}
 								onViewProduct={handleViewProduct}
+								loading={loading}
+								error={error}
+								onRetry={fetchProducts}
 							/>
 
-							<div className='text-center mt-12'>
-								<Link
-									to='/productos'
-									className='inline-block bg-gradient-to-r from-mystic-beige to-mystic-gold hover:from-mystic-gold hover:to-mystic-rose text-gray-800 font-montserrat font-semibold px-8 py-3 rounded-lg hover:shadow-lg transition-all duration-300 transform hover:scale-105'
-									aria-label='Ver todos los productos del catálogo'
-								>
-									Ver Todo el Catálogo
-								</Link>
-							</div>
+							{productsToShow.length > 0 && (
+								<div className='text-center mt-12'>
+									<Link
+										to='/productos'
+										className='inline-block bg-gradient-to-r from-mystic-beige to-mystic-gold hover:from-mystic-gold hover:to-mystic-rose text-gray-800 font-montserrat font-semibold px-8 py-3 rounded-lg hover:shadow-lg transition-all duration-300 transform hover:scale-105'
+										aria-label='Ver todos los productos del catálogo'
+									>
+										Ver Todo el Catálogo ({displayProducts.length} productos)
+									</Link>
+								</div>
+							)}
 						</div>
 					</section>
 

@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react'
+import React, {
+	createContext,
+	useContext,
+	useState,
+	useCallback,
+	ReactNode,
+	useEffect,
+} from 'react'
 import { mockApi, MockProduct } from '../services/mockApi'
 import { useToast } from '../hooks/use-toast'
 
@@ -41,10 +48,13 @@ export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) 
 		try {
 			setLoading(true)
 			setError(null)
+			console.log('ProductsContext: Fetching products...')
 			const fetchedProducts = await mockApi.getProducts()
+			console.log('ProductsContext: Products fetched:', fetchedProducts)
 			setProducts(fetchedProducts)
 		} catch (err) {
 			const errorMessage = err instanceof Error ? err.message : 'Error desconocido'
+			console.error('ProductsContext: Error fetching products:', err)
 			setError(errorMessage)
 			toast({
 				title: 'Error',
@@ -56,12 +66,19 @@ export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) 
 		}
 	}, [toast])
 
+	// Fetch products on mount
+	useEffect(() => {
+		fetchProducts()
+	}, [fetchProducts])
+
 	const createProduct = useCallback(
 		async (productData: Omit<MockProduct, 'id'>) => {
 			try {
 				setLoading(true)
 				setError(null)
+				console.log('ProductsContext: Creating product:', productData)
 				const newProduct = await mockApi.createProduct(productData)
+				console.log('ProductsContext: Product created:', newProduct)
 				setProducts((prev) => [...prev, newProduct])
 				toast({
 					title: '¡Éxito!',
@@ -69,6 +86,7 @@ export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) 
 				})
 			} catch (err) {
 				const errorMessage = err instanceof Error ? err.message : 'Error al crear producto'
+				console.error('ProductsContext: Error creating product:', err)
 				setError(errorMessage)
 				toast({
 					title: 'Error',
@@ -88,6 +106,7 @@ export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) 
 			try {
 				setLoading(true)
 				setError(null)
+				console.log('ProductsContext: Updating product:', id, productData)
 
 				// Prepare the complete product data for the API
 				const currentProduct = products.find((p) => p.id === id)
@@ -101,6 +120,7 @@ export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) 
 				}
 
 				const updatedProduct = await mockApi.updateProduct(id, completeProductData)
+				console.log('ProductsContext: Product updated:', updatedProduct)
 				setProducts((prev) => prev.map((p) => (p.id === id ? updatedProduct : p)))
 				toast({
 					title: '¡Éxito!',
@@ -108,6 +128,7 @@ export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) 
 				})
 			} catch (err) {
 				const errorMessage = err instanceof Error ? err.message : 'Error al actualizar producto'
+				console.error('ProductsContext: Error updating product:', err)
 				setError(errorMessage)
 				toast({
 					title: 'Error',
@@ -127,7 +148,9 @@ export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) 
 			try {
 				setLoading(true)
 				setError(null)
+				console.log('ProductsContext: Deleting product:', id)
 				await mockApi.deleteProduct(id)
+				console.log('ProductsContext: Product deleted')
 				setProducts((prev) => prev.filter((p) => p.id !== id))
 				toast({
 					title: '¡Éxito!',
@@ -135,6 +158,7 @@ export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) 
 				})
 			} catch (err) {
 				const errorMessage = err instanceof Error ? err.message : 'Error al eliminar producto'
+				console.error('ProductsContext: Error deleting product:', err)
 				setError(errorMessage)
 				toast({
 					title: 'Error',

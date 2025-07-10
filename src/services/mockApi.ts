@@ -44,6 +44,16 @@ export const mockApi = {
 						stock: 20,
 						featured: false,
 					},
+					{
+						id: '3',
+						name: 'Incienso de Sándalo',
+						description: 'Incienso premium de sándalo para purificación del ambiente.',
+						price: 8.99,
+						image: '/placeholder.svg',
+						category: 'inciensos',
+						stock: 15,
+						featured: true,
+					},
 				]
 			}
 
@@ -75,6 +85,16 @@ export const mockApi = {
 					stock: 20,
 					featured: false,
 				},
+				{
+					id: '3',
+					name: 'Incienso de Sándalo',
+					description: 'Incienso premium de sándalo para purificación del ambiente.',
+					price: 8.99,
+					image: '/placeholder.svg',
+					category: 'inciensos',
+					stock: 15,
+					featured: true,
+				},
 			]
 		}
 	},
@@ -93,7 +113,9 @@ export const mockApi = {
 			})
 
 			if (!response.ok) {
-				throw new Error(`Error al crear producto: ${response.statusText}`)
+				const errorText = await response.text()
+				console.error('Create product failed:', response.status, errorText)
+				throw new Error(`Error al crear producto: ${response.status} - ${errorText}`)
 			}
 
 			const data = await response.json()
@@ -101,7 +123,7 @@ export const mockApi = {
 			return data
 		} catch (error) {
 			console.error('Error creating product:', error)
-			throw new Error('No se pudo crear el producto')
+			throw new Error('No se pudo crear el producto. Verifica la conexión a internet.')
 		}
 	},
 
@@ -119,7 +141,9 @@ export const mockApi = {
 			})
 
 			if (!response.ok) {
-				throw new Error(`Error al actualizar producto: ${response.statusText}`)
+				const errorText = await response.text()
+				console.error('Update product failed:', response.status, errorText)
+				throw new Error(`Error al actualizar producto: ${response.status} - ${errorText}`)
 			}
 
 			const data = await response.json()
@@ -127,7 +151,7 @@ export const mockApi = {
 			return data
 		} catch (error) {
 			console.error('Error updating product:', error)
-			throw new Error('No se pudo actualizar el producto')
+			throw new Error('No se pudo actualizar el producto. Verifica la conexión a internet.')
 		}
 	},
 
@@ -141,12 +165,14 @@ export const mockApi = {
 			})
 
 			if (!response.ok) {
-				throw new Error(`Error al eliminar producto: ${response.statusText}`)
+				const errorText = await response.text()
+				console.error('Delete product failed:', response.status, errorText)
+				throw new Error(`Error al eliminar producto: ${response.status} - ${errorText}`)
 			}
 			console.log('Product deleted successfully')
 		} catch (error) {
 			console.error('Error deleting product:', error)
-			throw new Error('No se pudo eliminar el producto')
+			throw new Error('No se pudo eliminar el producto. Verifica la conexión a internet.')
 		}
 	},
 }
