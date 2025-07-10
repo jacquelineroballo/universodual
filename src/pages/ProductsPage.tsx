@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useProducts } from '../hooks/useProducts'
 import { useProductSearch } from '../hooks/useProductSearch'
-import { useOptimizedCart } from '../hooks/useOptimizedCart'
+import { useCarrito } from '../contexts/CarritoContext'
 import Header from '../components/Header'
 import SEO from '../components/SEO'
 import ProductsHeader from '../components/ProductsHeader'
@@ -14,19 +14,12 @@ import Cart from '../components/Cart'
 import { useToast } from '../hooks/use-toast'
 
 const ProductsPage: React.FC = () => {
+	const [isCartOpen, setIsCartOpen] = useState(false)
 	const { toast } = useToast()
 
 	const { products, loading, error, refetch } = useProducts()
-	const {
-		cartItems,
-		addToCart,
-		removeFromCart,
-		updateQuantity,
-		clearCart,
-		totalPrice,
-		isCartOpen,
-		setCartOpen,
-	} = useOptimizedCart()
+	const { cartItems, addToCart, removeFromCart, updateQuantity, clearCart, getTotalPrice } =
+		useCarrito()
 
 	const {
 		searchTerm,
@@ -38,7 +31,7 @@ const ProductsPage: React.FC = () => {
 		handleSearchChange,
 		handleCategoryChange,
 		handlePageChange,
-	} = useProductSearch(products, 4) // Cambié a 4 productos por página
+	} = useProductSearch(products, 12)
 
 	const handleAddToCart = (productId: string) => {
 		const product = products.find((p) => p.id === productId)
@@ -65,7 +58,7 @@ const ProductsPage: React.FC = () => {
 			<>
 				<SEO title='Cargando productos...' />
 				<div className='min-h-screen bg-white font-montserrat'>
-					<Header cartItems={cartItems} onCartClick={() => setCartOpen(true)} />
+					<Header cartItems={cartItems} onCartClick={() => setIsCartOpen(true)} />
 					<LoadingSpinner />
 				</div>
 			</>
@@ -77,7 +70,7 @@ const ProductsPage: React.FC = () => {
 			<>
 				<SEO title='Error al cargar productos' />
 				<div className='min-h-screen bg-white font-montserrat'>
-					<Header cartItems={cartItems} onCartClick={() => setCartOpen(true)} />
+					<Header cartItems={cartItems} onCartClick={() => setIsCartOpen(true)} />
 					<ErrorMessage message={error} onRetry={refetch} />
 				</div>
 			</>
@@ -93,7 +86,7 @@ const ProductsPage: React.FC = () => {
 			/>
 
 			<div className='min-h-screen bg-gradient-to-br from-mystic-cream via-mystic-lavender/10 to-mystic-beige/20 font-montserrat'>
-				<Header cartItems={cartItems} onCartClick={() => setCartOpen(true)} />
+				<Header cartItems={cartItems} onCartClick={() => setIsCartOpen(true)} />
 
 				<main className='container mx-auto px-4 py-8' role='main'>
 					<ProductsHeader />
@@ -107,7 +100,11 @@ const ProductsPage: React.FC = () => {
 						onCategoryChange={handleCategoryChange}
 					/>
 
-					<ProductsGrid products={paginatedProducts} onClearFilters={handleClearFilters} />
+					<ProductsGrid
+						products={paginatedProducts}
+						onAddToCart={handleAddToCart}
+						onClearFilters={handleClearFilters}
+					/>
 
 					<ProductsPagination
 						currentPage={currentPage}
@@ -118,12 +115,12 @@ const ProductsPage: React.FC = () => {
 
 				<Cart
 					isOpen={isCartOpen}
-					onClose={() => setCartOpen(false)}
+					onClose={() => setIsCartOpen(false)}
 					items={cartItems}
 					onUpdateQuantity={updateQuantity}
 					onRemoveItem={removeFromCart}
 					onClearCart={clearCart}
-					totalPrice={totalPrice}
+					totalPrice={getTotalPrice()}
 				/>
 			</div>
 		</>

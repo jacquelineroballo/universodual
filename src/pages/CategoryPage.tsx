@@ -1,7 +1,7 @@
 import React from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useProducts } from '../hooks/useProducts'
-import { useOptimizedCart } from '../hooks/useOptimizedCart'
+import { useCart } from '../hooks/useCart'
 import Header from '../components/Header'
 import ProductList from '../components/ProductList'
 import SEO from '../components/SEO'
@@ -13,7 +13,7 @@ const CategoryPage: React.FC = () => {
 	const { toast } = useToast()
 
 	const { products, loading, error, refetch } = useProducts()
-	const { cartItems, addToCart, updateQuantity, removeFromCart, setCartOpen } = useOptimizedCart()
+	const { cartItems, addToCart, updateQuantity, removeFromCart } = useCart()
 
 	// Filtrar productos por categoría
 	const filteredProducts = products.filter((product) => product.category === category)
@@ -72,7 +72,7 @@ const CategoryPage: React.FC = () => {
 			/>
 
 			<div className='min-h-screen bg-white font-montserrat'>
-				<Header cartItems={cartItems} onCartClick={() => setCartOpen(true)} />
+				<Header cartItems={cartItems} onCartClick={() => {}} />
 
 				<main className='container mx-auto px-4 py-8' role='main'>
 					<div className='mb-8'>
@@ -93,6 +93,7 @@ const CategoryPage: React.FC = () => {
 
 					<ProductList
 						products={filteredProducts}
+						onAddToCart={handleAddToCart}
 						loading={loading}
 						error={error}
 						onRetry={refetch}

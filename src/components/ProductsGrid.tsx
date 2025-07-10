@@ -1,27 +1,15 @@
-import React, { memo } from 'react'
+import React from 'react'
 import { Product } from '../types/Product'
-import OptimizedProductCard from './OptimizedProductCard'
+import ProductCard from './ProductCard'
 import { Button } from './ui/button'
-import { useOptimizedCart } from '../hooks/useOptimizedCart'
 
 interface ProductsGridProps {
 	products: Product[]
+	onAddToCart: (productId: string) => void
 	onClearFilters: () => void
 }
 
-const ProductsGrid = memo<ProductsGridProps>(({ products, onClearFilters }) => {
-	const { addToCart, getItemQuantity } = useOptimizedCart()
-
-	const handleAddToCart = React.useCallback(
-		(productId: string) => {
-			const product = products.find((p) => p.id === productId)
-			if (product) {
-				addToCart(product)
-			}
-		},
-		[products, addToCart]
-	)
-
+const ProductsGrid: React.FC<ProductsGridProps> = ({ products, onAddToCart, onClearFilters }) => {
 	if (products.length === 0) {
 		return (
 			<div className='text-center py-16' role='status' aria-live='polite'>
@@ -51,17 +39,11 @@ const ProductsGrid = memo<ProductsGridProps>(({ products, onClearFilters }) => {
 		>
 			{products.map((product) => (
 				<div key={product.id} role='gridcell'>
-					<OptimizedProductCard
-						product={product}
-						onAddToCart={() => handleAddToCart(product.id)}
-						quantity={getItemQuantity(product.id)}
-					/>
+					<ProductCard product={product} onAddToCart={() => onAddToCart(product.id)} />
 				</div>
 			))}
 		</div>
 	)
-})
-
-ProductsGrid.displayName = 'ProductsGrid'
+}
 
 export default ProductsGrid
