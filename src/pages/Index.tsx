@@ -6,11 +6,11 @@ import Cart from '../components/Cart'
 import Header from '../components/Header'
 import SEO from '../components/SEO'
 import { useCarrito } from '../contexts/CarritoContext'
-import { useProducts } from '../contexts/ProductsContext'
+import { ProductsProvider, useProducts } from '../contexts/ProductsContext'
 import LoadingSpinner from '../components/LoadingSpinner'
 import ErrorMessage from '../components/ErrorMessage'
 
-const Index = () => {
+const IndexContent = () => {
 	const [isCartOpen, setIsCartOpen] = useState(false)
 	const { cartItems, addToCart, removeFromCart, updateQuantity, clearCart, getTotalPrice } =
 		useCarrito()
@@ -162,6 +162,14 @@ const Index = () => {
 				/>
 			</div>
 		</>
+	)
+}
+
+const Index = () => {
+	return (
+		<ProductsProvider>
+			<IndexContent />
+		</ProductsProvider>
 	)
 }
 

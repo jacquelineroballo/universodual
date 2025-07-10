@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { useProducts } from '../hooks/useProducts'
 import { useProductSearch } from '../hooks/useProductSearch'
 import { useCarrito } from '../contexts/CarritoContext'
+import { ProductsProvider, useProducts } from '../contexts/ProductsContext'
 import Header from '../components/Header'
 import SEO from '../components/SEO'
 import ProductsHeader from '../components/ProductsHeader'
@@ -13,13 +13,26 @@ import ErrorMessage from '../components/ErrorMessage'
 import Cart from '../components/Cart'
 import { useToast } from '../hooks/use-toast'
 
-const ProductsPage: React.FC = () => {
+const ProductsPageContent: React.FC = () => {
 	const [isCartOpen, setIsCartOpen] = useState(false)
 	const { toast } = useToast()
 
-	const { products, loading, error, refetch } = useProducts()
+	const { products, loading, error, fetchProducts } = useProducts()
 	const { cartItems, addToCart, removeFromCart, updateQuantity, clearCart, getTotalPrice } =
 		useCarrito()
+
+	// Transform MockProducts to Products for search hook
+	const transformedProducts = products.map((product) => ({
+		id: product.id,
+		name: product.name,
+		price: product.price,
+		image: product.image,
+		description: product.description,
+		category: product.category as 'velas' | 'inciensos' | 'cristales' | 'accesorios',
+		inStock: product.stock > 0,
+		stock: product.stock,
+		featured: product.featured,
+	}))
 
 	const {
 		searchTerm,
@@ -31,10 +44,10 @@ const ProductsPage: React.FC = () => {
 		handleSearchChange,
 		handleCategoryChange,
 		handlePageChange,
-	} = useProductSearch(products, 12)
+	} = useProductSearch(transformedProducts, 12)
 
 	const handleAddToCart = (productId: string) => {
-		const product = products.find((p) => p.id === productId)
+		const product = transformedProducts.find((p) => p.id === productId)
 		if (product) {
 			addToCart(product)
 			const existingItem = cartItems.find((item) => item.id === product.id)
@@ -71,7 +84,7 @@ const ProductsPage: React.FC = () => {
 				<SEO title='Error al cargar productos' />
 				<div className='min-h-screen bg-white font-montserrat'>
 					<Header cartItems={cartItems} onCartClick={() => setIsCartOpen(true)} />
-					<ErrorMessage message={error} onRetry={refetch} />
+					<ErrorMessage message={error} onRetry={fetchProducts} />
 				</div>
 			</>
 		)
@@ -124,6 +137,14 @@ const ProductsPage: React.FC = () => {
 				/>
 			</div>
 		</>
+	)
+}
+
+const ProductsPage: React.FC = () => {
+	return (
+		<ProductsProvider>
+			<ProductsPageContent />
+		</ProductsProvider>
 	)
 }
 

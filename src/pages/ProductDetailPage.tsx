@@ -1,6 +1,6 @@
 import React from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { useProducts } from '../hooks/useProducts'
+import { ProductsProvider, useProducts } from '../contexts/ProductsContext'
 import { useCarrito } from '../contexts/CarritoContext'
 import Header from '../components/Header'
 import SEO from '../components/SEO'
@@ -10,18 +10,30 @@ import { Button } from '../components/ui/button'
 import { useToast } from '../hooks/use-toast'
 import { ArrowLeft, ShoppingCart } from 'lucide-react'
 
-const ProductDetailPage: React.FC = () => {
+const ProductDetailContent: React.FC = () => {
 	const { id } = useParams<{ id: string }>()
 	const { toast } = useToast()
 
-	const { products, loading, error, refetch } = useProducts()
+	const { products, loading, error, fetchProducts } = useProducts()
 	const { cartItems, addToCart } = useCarrito()
 
 	const product = products.find((p) => p.id === id)
 
 	const handleAddToCart = () => {
 		if (product) {
-			addToCart(product)
+			const cartProduct = {
+				id: product.id,
+				name: product.name,
+				price: product.price,
+				image: product.image,
+				description: product.description,
+				category: product.category as 'velas' | 'inciensos' | 'cristales' | 'accesorios',
+				inStock: product.stock > 0,
+				stock: product.stock,
+				featured: product.featured,
+			}
+
+			addToCart(cartProduct)
 
 			const existingItem = cartItems.find((item) => item.id === product.id)
 
@@ -57,7 +69,7 @@ const ProductDetailPage: React.FC = () => {
 				<SEO title='Error al cargar producto' />
 				<div className='min-h-screen bg-white font-montserrat'>
 					<Header cartItems={cartItems} onCartClick={() => {}} />
-					<ErrorMessage message={error} onRetry={refetch} />
+					<ErrorMessage message={error} onRetry={fetchProducts} />
 				</div>
 			</>
 		)
@@ -122,10 +134,10 @@ const ProductDetailPage: React.FC = () => {
 							<div className='absolute top-4 right-4'>
 								<span
 									className={`px-3 py-2 rounded-full text-sm font-montserrat font-medium ${
-										product.inStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+										product.stock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
 									}`}
 								>
-									{product.inStock ? 'Disponible' : 'Agotado'}
+									{product.stock > 0 ? 'Disponible' : 'Agotado'}
 								</span>
 							</div>
 						</div>
@@ -155,14 +167,14 @@ const ProductDetailPage: React.FC = () => {
 
 								<Button
 									onClick={handleAddToCart}
-									disabled={!product.inStock}
+									disabled={product.stock === 0}
 									className='w-full bg-mystic-beige hover:bg-mystic-gold text-gray-800 font-montserrat font-medium py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed'
 									aria-label={
-										product.inStock ? `Agregar ${product.name} al carrito` : 'Producto sin stock'
+										product.stock > 0 ? `Agregar ${product.name} al carrito` : 'Producto sin stock'
 									}
 								>
 									<ShoppingCart className='w-5 h-5 mr-2' />
-									{product.inStock ? 'Agregar al Carrito' : 'Sin Stock'}
+									{product.stock > 0 ? 'Agregar al Carrito' : 'Sin Stock'}
 								</Button>
 							</div>
 						</div>
@@ -170,6 +182,14 @@ const ProductDetailPage: React.FC = () => {
 				</main>
 			</div>
 		</>
+	)
+}
+
+const ProductDetailPage: React.FC = () => {
+	return (
+		<ProductsProvider>
+			<ProductDetailContent />
+		</ProductsProvider>
 	)
 }
 

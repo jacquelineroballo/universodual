@@ -14,99 +14,79 @@ export interface MockProduct {
 export const mockApi = {
 	// Obtener todos los productos
 	async getProducts(): Promise<MockProduct[]> {
-		try {
-			console.log('Fetching products from:', `${MOCK_API_URL}/products`)
+		console.log('Fetching products from:', `${MOCK_API_URL}/products`)
 
-			const response = await fetch(`${MOCK_API_URL}/products`)
+		const response = await fetch(`${MOCK_API_URL}/products`)
 
-			if (!response.ok) {
-				console.error('API request failed:', response.status, response.statusText)
-				throw new Error(`Error al obtener productos: ${response.status}`)
-			}
-
-			const data = await response.json()
-			console.log('Products fetched successfully:', data)
-			return data
-		} catch (error) {
-			console.error('Error fetching products:', error)
-			throw error
+		if (!response.ok) {
+			console.error('API request failed:', response.status, response.statusText)
+			throw new Error(`Error al obtener productos: ${response.status}`)
 		}
+
+		const data = await response.json()
+		console.log('Products fetched successfully:', data)
+		return data
 	},
 
 	// Crear un nuevo producto
 	async createProduct(product: Omit<MockProduct, 'id'>): Promise<MockProduct> {
-		try {
-			console.log('Creating product:', product)
+		console.log('Creating product:', product)
 
-			const response = await fetch(`${MOCK_API_URL}/products`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(product),
-			})
+		const response = await fetch(`${MOCK_API_URL}/products`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(product),
+		})
 
-			if (!response.ok) {
-				const errorText = await response.text()
-				console.error('Create product failed:', response.status, errorText)
-				throw new Error(`Error al crear producto: ${response.status} - ${errorText}`)
-			}
-
-			const data = await response.json()
-			console.log('Product created successfully:', data)
-			return data
-		} catch (error) {
-			console.error('Error creating product:', error)
-			throw error
+		if (!response.ok) {
+			const errorText = await response.text()
+			console.error('Create product failed:', response.status, errorText)
+			throw new Error(`Error al crear producto: ${response.status} - ${errorText}`)
 		}
+
+		const data = await response.json()
+		console.log('Product created successfully:', data)
+		return data
 	},
 
 	// Actualizar un producto
 	async updateProduct(id: string, product: Partial<MockProduct>): Promise<MockProduct> {
-		try {
-			console.log('Updating product:', id, product)
+		console.log('Updating product:', id, product)
 
-			const response = await fetch(`${MOCK_API_URL}/products/${id}`, {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(product),
-			})
+		const response = await fetch(`${MOCK_API_URL}/products/${id}`, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(product),
+		})
 
-			if (!response.ok) {
-				const errorText = await response.text()
-				console.error('Update product failed:', response.status, errorText)
-				throw new Error(`Error al actualizar producto: ${response.status} - ${errorText}`)
-			}
-
-			const data = await response.json()
-			console.log('Product updated successfully:', data)
-			return data
-		} catch (error) {
-			console.error('Error updating product:', error)
-			throw error
+		if (!response.ok) {
+			const errorText = await response.text()
+			console.error('Update product failed:', response.status, errorText)
+			throw new Error(`Error al actualizar producto: ${response.status} - ${errorText}`)
 		}
+
+		const data = await response.json()
+		console.log('Product updated successfully:', data)
+		return data
 	},
 
 	// Eliminar un producto
 	async deleteProduct(id: string): Promise<void> {
-		try {
-			console.log('Deleting product:', id)
+		console.log('Deleting product:', id)
 
-			const response = await fetch(`${MOCK_API_URL}/products/${id}`, {
-				method: 'DELETE',
-			})
+		const response = await fetch(`${MOCK_API_URL}/products/${id}`, {
+			method: 'DELETE',
+		})
 
-			if (!response.ok) {
-				const errorText = await response.text()
-				console.error('Delete product failed:', response.status, errorText)
-				throw new Error(`Error al eliminar producto: ${response.status} - ${errorText}`)
-			}
-			console.log('Product deleted successfully')
-		} catch (error) {
-			console.error('Error deleting product:', error)
-			throw error
+		if (!response.ok) {
+			const errorText = await response.text()
+			console.error('Delete product failed:', response.status, errorText)
+			throw new Error(`Error al eliminar producto: ${response.status} - ${errorText}`)
 		}
+		console.log('Product deleted successfully')
 	},
 }
