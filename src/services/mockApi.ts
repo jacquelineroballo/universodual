@@ -1,4 +1,4 @@
-const MOCK_API_URL = 'https://6866c01a89803950dbb3c66f.mockapi.io/universodual'
+const MOCK_API_URL = 'https://6866c01a89803950dbb3c66e.mockapi.io/universodual'
 
 export interface MockProduct {
 	id: string
