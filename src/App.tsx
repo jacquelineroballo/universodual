@@ -16,37 +16,31 @@ import CheckoutSuccessPage from './pages/CheckoutSuccessPage'
 import MyAccountPage from './pages/MyAccountPage'
 import ContactPage from './pages/ContactPage'
 import NotFound from './pages/NotFound'
+import AdminPage from './pages/AdminPage'
 
 const queryClient = new QueryClient()
 
-const App = () => (
-	<HelmetProvider>
-		<QueryClientProvider client={queryClient}>
-			<TooltipProvider>
-				<AuthProvider>
-					<CarritoProvider>
-						<Toaster />
-						<Sonner />
-						<BrowserRouter>
-							<Routes>
-								<Route path='/' element={<Index />} />
-								<Route path='/auth' element={<AuthPage />} />
-								<Route path='/productos' element={<ProductsPage />} />
-								<Route path='/categoria/:category' element={<CategoryPage />} />
-								<Route path='/producto/:id' element={<ProductDetailPage />} />
-								<Route path='/checkout' element={<CheckoutPage />} />
-								<Route path='/checkout-success' element={<CheckoutSuccessPage />} />
-								<Route path='/mi-cuenta' element={<MyAccountPage />} />
-								<Route path='/contacto' element={<ContactPage />} />
-								{/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-								<Route path='*' element={<NotFound />} />
-							</Routes>
-						</BrowserRouter>
-					</CarritoProvider>
-				</AuthProvider>
-			</TooltipProvider>
-		</QueryClientProvider>
-	</HelmetProvider>
-)
+function App() {
+	return (
+		<BrowserRouter>
+			<CarritoProvider>
+				<Routes>
+					<Route path='/' element={<Index />} />
+					<Route path='/productos' element={<ProductsPage />} />
+					<Route path='/categoria/:categoria' element={<CategoryPage />} />
+					<Route path='/producto/:id' element={<ProductDetailPage />} />
+					<Route path='/contacto' element={<ContactPage />} />
+					<Route path='/checkout' element={<CheckoutPage />} />
+					<Route path='/checkout/exito' element={<CheckoutSuccessPage />} />
+					<Route path='/mi-cuenta' element={<MyAccountPage />} />
+					<Route path='/auth' element={<AuthPage />} />
+					<Route path='/admin' element={<AdminPage />} />
+					<Route path='*' element={<NotFound />} />
+				</Routes>
+				<Toaster />
+			</CarritoProvider>
+		</BrowserRouter>
+	)
+}
 
 export default App
