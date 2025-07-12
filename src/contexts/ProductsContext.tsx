@@ -18,6 +18,9 @@ interface ProductsContextType {
 	updateProduct: (id: string, product: Partial<MockProduct>) => Promise<void>
 	deleteProduct: (id: string) => Promise<void>
 	clearError: () => void
+	getProductById: (id: string) => MockProduct | undefined
+	getProductsByCategory: (category: string) => MockProduct[]
+	getFeaturedProducts: () => MockProduct[]
 }
 
 const ProductsContext = createContext<ProductsContextType | undefined>(undefined)
@@ -108,18 +111,7 @@ export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) 
 				setError(null)
 				console.log('ProductsContext: Updating product:', id, productData)
 
-				// Prepare the complete product data for the API
-				const currentProduct = products.find((p) => p.id === id)
-				if (!currentProduct) {
-					throw new Error('Producto no encontrado')
-				}
-
-				const completeProductData = {
-					...currentProduct,
-					...productData,
-				}
-
-				const updatedProduct = await mockApi.updateProduct(id, completeProductData)
+				const updatedProduct = await mockApi.updateProduct(id, productData)
 				console.log('ProductsContext: Product updated:', updatedProduct)
 				setProducts((prev) => prev.map((p) => (p.id === id ? updatedProduct : p)))
 				toast({
@@ -140,7 +132,7 @@ export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) 
 				setLoading(false)
 			}
 		},
-		[toast, products]
+		[toast]
 	)
 
 	const deleteProduct = useCallback(
@@ -173,6 +165,24 @@ export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) 
 		[toast]
 	)
 
+	const getProductById = useCallback(
+		(id: string) => {
+			return products.find((product) => product.id === id)
+		},
+		[products]
+	)
+
+	const getProductsByCategory = useCallback(
+		(category: string) => {
+			return products.filter((product) => product.category === category)
+		},
+		[products]
+	)
+
+	const getFeaturedProducts = useCallback(() => {
+		return products.filter((product) => product.featured)
+	}, [products])
+
 	const value: ProductsContextType = {
 		products,
 		loading,
@@ -182,6 +192,9 @@ export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) 
 		updateProduct,
 		deleteProduct,
 		clearError,
+		getProductById,
+		getProductsByCategory,
+		getFeaturedProducts,
 	}
 
 	return <ProductsContext.Provider value={value}>{children}</ProductsContext.Provider>

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
@@ -11,9 +11,13 @@ interface ImageUploadProps {
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({ value, onChange, error }) => {
-	const [preview, setPreview] = useState<string>(value)
+	const [preview, setPreview] = useState<string>(value || '')
 	const [isUploading, setIsUploading] = useState(false)
 	const fileInputRef = useRef<HTMLInputElement>(null)
+
+	useEffect(() => {
+		setPreview(value || '')
+	}, [value])
 
 	const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0]
@@ -37,6 +41,11 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ value, onChange, error }) => 
 				const result = e.target?.result as string
 				setPreview(result)
 				onChange(result)
+				setIsUploading(false)
+			}
+			reader.onerror = () => {
+				console.error('Error reading file')
+				alert('Error al leer la imagen')
 				setIsUploading(false)
 			}
 			reader.readAsDataURL(file)
