@@ -1,11 +1,12 @@
 import { useState, useEffect, createContext, useContext, ReactNode } from 'react'
 import { User, Session } from '@supabase/supabase-js'
-import supabase from '@/integrations/supabase/client'
+import { supabase } from '@/integrations/supabase/client'
 
 interface AuthContextType {
 	user: User | null
 	session: Session | null
 	loading: boolean
+	isAdmin: boolean
 	signUp: (email: string, password: string, fullName?: string) => Promise<{ error: any }>
 	signIn: (email: string, password: string) => Promise<{ error: any }>
 	signOut: () => Promise<void>
@@ -17,11 +18,11 @@ export const useAuth = () => {
 	const context = useContext(AuthContext)
 	if (!context) {
 		console.error('useAuth must be used within an AuthProvider')
-		// Return default values to prevent crashes
 		return {
 			user: null,
 			session: null,
 			loading: false,
+			isAdmin: false,
 			signUp: async () => ({ error: new Error('Auth not initialized') }),
 			signIn: async () => ({ error: new Error('Auth not initialized') }),
 			signOut: async () => {},
@@ -38,11 +39,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	const [user, setUser] = useState<User | null>(null)
 	const [session, setSession] = useState<Session | null>(null)
 	const [loading, setLoading] = useState(true)
+	const [isAdmin, setIsAdmin] = useState(false)
+
+	// Lista de emails de administradores
+	const adminEmails = ['jacqueline.roballo@syloper.com', 'admin@universodual.com']
 
 	useEffect(() => {
 		console.log('AuthProvider: Initializing auth state')
 
-		// Load auth state from localStorage on mount
 		const savedSession = localStorage.getItem('supabase_session')
 		const savedUser = localStorage.getItem('supabase_user')
 
@@ -53,6 +57,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 				console.log('AuthProvider: Loaded saved session')
 				setSession(parsedSession)
 				setUser(parsedUser)
+				setIsAdmin(adminEmails.includes(parsedUser.email))
 			} catch (error) {
 				console.error('Error parsing saved auth data:', error)
 				localStorage.removeItem('supabase_session')
@@ -60,16 +65,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 			}
 		}
 
-		// Set up auth state listener
 		const {
 			data: { subscription },
 		} = supabase.auth.onAuthStateChange((event, session) => {
 			console.log('AuthProvider: Auth state changed:', event, session?.user?.email)
 			setSession(session)
 			setUser(session?.user ?? null)
+			setIsAdmin(session?.user ? adminEmails.includes(session.user.email) : false)
 			setLoading(false)
 
-			// Save to localStorage
 			if (session && session.user) {
 				localStorage.setItem('supabase_session', JSON.stringify(session))
 				localStorage.setItem('supabase_user', JSON.stringify(session.user))
@@ -79,16 +83,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 			}
 		})
 
-		// Check for existing session
 		supabase.auth
 			.getSession()
 			.then(({ data: { session } }) => {
 				console.log('AuthProvider: Got existing session:', session?.user?.email)
 				setSession(session)
 				setUser(session?.user ?? null)
+				setIsAdmin(session?.user ? adminEmails.includes(session.user.email) : false)
 				setLoading(false)
 
-				// Save to localStorage
 				if (session && session.user) {
 					localStorage.setItem('supabase_session', JSON.stringify(session))
 					localStorage.setItem('supabase_user', JSON.stringify(session.user))
@@ -144,7 +147,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	const signOut = async () => {
 		console.log('AuthProvider: Signing out user')
 		await supabase.auth.signOut()
-		// Clear localStorage
 		localStorage.removeItem('supabase_session')
 		localStorage.removeItem('supabase_user')
 	}
@@ -153,12 +155,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 		user,
 		session,
 		loading,
+		isAdmin,
 		signUp,
 		signIn,
 		signOut,
 	}
 
-	console.log('AuthProvider: Rendering with user:', user?.email, 'loading:', loading)
+	console.log(
+		'AuthProvider: Rendering with user:',
+		user?.email,
+		'loading:',
+		loading,
+		'isAdmin:',
+		isAdmin
+	)
 
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

@@ -19,13 +19,11 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ value, onChange, error }) => 
 		const file = event.target.files?.[0]
 		if (!file) return
 
-		// Validate file type
 		if (!file.type.startsWith('image/')) {
 			alert('Por favor selecciona una imagen válida')
 			return
 		}
 
-		// Validate file size (max 5MB)
 		if (file.size > 5 * 1024 * 1024) {
 			alert('La imagen debe ser menor a 5MB')
 			return
@@ -34,7 +32,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ value, onChange, error }) => 
 		setIsUploading(true)
 
 		try {
-			// Convert file to base64 for preview and storage
 			const reader = new FileReader()
 			reader.onload = (e) => {
 				const result = e.target?.result as string
@@ -70,7 +67,15 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ value, onChange, error }) => 
 			<div className='border-2 border-dashed border-gray-300 rounded-lg p-6'>
 				{preview ? (
 					<div className='relative'>
-						<img src={preview} alt='Preview' className='w-full h-48 object-cover rounded-lg' />
+						<img
+							src={preview}
+							alt='Preview'
+							className='w-full h-48 object-cover rounded-lg'
+							onError={(e) => {
+								const target = e.target as HTMLImageElement
+								target.src = '/placeholder.svg'
+							}}
+						/>
 						<Button
 							type='button'
 							variant='destructive'

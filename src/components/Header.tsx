@@ -13,7 +13,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ cartItems, onCartClick }) => {
 	const navigate = useNavigate()
-	const { user } = useAuth()
+	const { user, isAdmin } = useAuth()
 	const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0)
 
 	const scrollToProducts = () => {
@@ -21,7 +21,6 @@ const Header: React.FC<HeaderProps> = ({ cartItems, onCartClick }) => {
 		if (element) {
 			element.scrollIntoView({ behavior: 'smooth' })
 		} else {
-			// If we're not on the homepage, navigate there and then scroll
 			navigate('/#productos')
 		}
 	}
@@ -73,7 +72,7 @@ const Header: React.FC<HeaderProps> = ({ cartItems, onCartClick }) => {
 					{/* Carrito */}
 					<div className='flex items-center space-x-4'>
 						{/* Admin button - only show when user is logged in */}
-						{user && (
+						{user && isAdmin && (
 							<Button
 								onClick={() => navigate('/admin')}
 								variant='outline'

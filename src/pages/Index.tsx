@@ -9,9 +9,11 @@ import { useCarrito } from '../contexts/CarritoContext'
 import { ProductsProvider, useProducts } from '../contexts/ProductsContext'
 import LoadingSpinner from '../components/LoadingSpinner'
 import ErrorMessage from '../components/ErrorMessage'
+import { useToast } from '../hooks/use-toast'
 
 const IndexContent = () => {
 	const [isCartOpen, setIsCartOpen] = useState(false)
+	const { toast } = useToast()
 	const { cartItems, addToCart, removeFromCart, updateQuantity, clearCart, getTotalPrice } =
 		useCarrito()
 	const { products, loading, error, fetchProducts } = useProducts()
@@ -20,7 +22,10 @@ const IndexContent = () => {
 		return (
 			<>
 				<SEO />
-				<LoadingSpinner />
+				<div className='min-h-screen bg-white font-montserrat'>
+					<Header cartItems={cartItems} onCartClick={() => setIsCartOpen(true)} />
+					<LoadingSpinner />
+				</div>
 			</>
 		)
 	}
@@ -29,7 +34,10 @@ const IndexContent = () => {
 		return (
 			<>
 				<SEO />
-				<ErrorMessage message={error} onRetry={fetchProducts} />
+				<div className='min-h-screen bg-white font-montserrat'>
+					<Header cartItems={cartItems} onCartClick={() => setIsCartOpen(true)} />
+					<ErrorMessage message={error} onRetry={fetchProducts} />
+				</div>
 			</>
 		)
 	}
@@ -49,12 +57,18 @@ const IndexContent = () => {
 				stock: product.stock,
 				featured: product.featured,
 			}
-			addToCart(cartProduct)
-		}
-	}
 
-	const handleViewProduct = (productId: string) => {
-		console.log('View product:', productId)
+			addToCart(cartProduct)
+
+			const existingItem = cartItems.find((item) => item.id === product.id)
+
+			toast({
+				title: existingItem ? 'Producto actualizado' : '¡Producto agregado!',
+				description: existingItem
+					? `Se agregó otra unidad de ${product.name} al carrito`
+					: `${product.name} se ha agregado a tu carrito mágico`,
+			})
+		}
 	}
 
 	const scrollToProducts = () => {
