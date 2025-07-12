@@ -1,25 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
-import supabase from '@/integrations/supabase/client'
 import { Button } from '../components/ui/button'
 import { Input } from '../components/ui/input'
 import { useToast } from '../hooks/use-toast'
 import { User, MapPin, Phone, Mail, ArrowLeft } from 'lucide-react'
 import Header from '../components/Header'
 import { useCarrito } from '../contexts/CarritoContext'
-import LoadingSpinner from '../components/LoadingSpinner'
-import ErrorMessage from '../components/ErrorMessage'
 
 interface Profile {
 	id: string
-	email: string | null
-	full_name: string | null
-	avatar_url: string | null
-	shipping_address: string | null
-	phone: string | null
-	city: string | null
-	postal_code: number | null
+	email: string
+	full_name?: string
+	shipping_address?: string
+	phone?: string
+	city?: string
+	postal_code?: string
 }
 
 const MyAccountPage: React.FC = () => {
@@ -32,7 +28,6 @@ const MyAccountPage: React.FC = () => {
 	const [loading, setLoading] = useState(true)
 	const [saving, setSaving] = useState(false)
 	const [isEditing, setIsEditing] = useState(false)
-	const [error, setError] = useState<string | null>(null)
 
 	const [formData, setFormData] = useState({
 		full_name: '',
@@ -69,28 +64,24 @@ const MyAccountPage: React.FC = () => {
 		}
 
 		try {
-			console.log('MyAccountPage: Fetching profile for user ID:', user.id)
+			console.log('MyAccountPage: Loading profile from localStorage')
 			setLoading(true)
-			setError(null)
 
-			const { data, error } = await supabase.from('profiles').select('*').eq('id', user.id).single()
+			// Load profile from localStorage
+			const savedProfiles = localStorage.getItem('user_profiles')
+			const profiles = savedProfiles ? JSON.parse(savedProfiles) : {}
+			const userProfile = profiles[user.id]
 
-			if (error && error.code !== 'PGRST116') {
-				console.error('MyAccountPage: Profile fetch error:', error)
-				throw error
-			}
-
-			if (data) {
+			if (userProfile) {
 				console.log('MyAccountPage: Profile loaded successfully')
 				const profileData: Profile = {
-					id: data.id,
-					email: data.email,
-					full_name: data.full_name,
-					avatar_url: data.avatar_url,
-					shipping_address: data.shipping_address || null,
-					phone: data.phone || null,
-					city: data.city || null,
-					postal_code: data.postal_code || null,
+					id: user.id,
+					email: user.email,
+					full_name: userProfile.full_name || user.full_name,
+					shipping_address: userProfile.shipping_address || '',
+					phone: userProfile.phone || '',
+					city: userProfile.city || '',
+					postal_code: userProfile.postal_code || '',
 				}
 
 				setProfile(profileData)
@@ -99,20 +90,18 @@ const MyAccountPage: React.FC = () => {
 					shipping_address: profileData.shipping_address || '',
 					phone: profileData.phone || '',
 					city: profileData.city || '',
-					postal_code: profileData.postal_code?.toString() || '',
+					postal_code: profileData.postal_code || '',
 				})
 			} else {
 				console.log('MyAccountPage: No profile found, using user data')
-				// Create basic profile from user data
 				const basicProfile: Profile = {
 					id: user.id,
 					email: user.email,
-					full_name: user.user_metadata?.full_name || null,
-					avatar_url: null,
-					shipping_address: null,
-					phone: null,
-					city: null,
-					postal_code: null,
+					full_name: user.full_name || '',
+					shipping_address: '',
+					phone: '',
+					city: '',
+					postal_code: '',
 				}
 				setProfile(basicProfile)
 				setFormData({
@@ -125,7 +114,11 @@ const MyAccountPage: React.FC = () => {
 			}
 		} catch (error) {
 			console.error('MyAccountPage: Error loading profile:', error)
-			setError('No se pudo cargar la información del perfil')
+			toast({
+				title: 'Error',
+				description: 'No se pudo cargar la información del perfil',
+				variant: 'destructive',
+			})
 		} finally {
 			setLoading(false)
 		}
@@ -136,18 +129,21 @@ const MyAccountPage: React.FC = () => {
 
 		try {
 			setSaving(true)
-			const { error } = await supabase.from('profiles').upsert({
-				id: user.id,
-				email: user.email,
+
+			// Save profile to localStorage
+			const savedProfiles = localStorage.getItem('user_profiles')
+			const profiles = savedProfiles ? JSON.parse(savedProfiles) : {}
+
+			profiles[user.id] = {
 				full_name: formData.full_name,
 				shipping_address: formData.shipping_address,
 				phone: formData.phone,
 				city: formData.city,
-				postal_code: formData.postal_code ? parseInt(formData.postal_code) : null,
+				postal_code: formData.postal_code,
 				updated_at: new Date().toISOString(),
-			})
+			}
 
-			if (error) throw error
+			localStorage.setItem('user_profiles', JSON.stringify(profiles))
 
 			toast({
 				title: '¡Perfil actualizado!',
@@ -173,35 +169,19 @@ const MyAccountPage: React.FC = () => {
 		navigate('/')
 	}
 
-	if (authLoading) {
+	if (authLoading || loading) {
 		return (
 			<div className='min-h-screen bg-white font-montserrat'>
 				<Header cartItems={cartItems} onCartClick={() => {}} />
-				<LoadingSpinner />
+				<div className='flex items-center justify-center min-h-[400px]'>
+					<div className='text-center'>Cargando...</div>
+				</div>
 			</div>
 		)
 	}
 
 	if (!user) {
 		return null
-	}
-
-	if (loading) {
-		return (
-			<div className='min-h-screen bg-white font-montserrat'>
-				<Header cartItems={cartItems} onCartClick={() => {}} />
-				<LoadingSpinner />
-			</div>
-		)
-	}
-
-	if (error) {
-		return (
-			<div className='min-h-screen bg-white font-montserrat'>
-				<Header cartItems={cartItems} onCartClick={() => {}} />
-				<ErrorMessage message={error} onRetry={loadProfile} />
-			</div>
-		)
 	}
 
 	return (
@@ -365,7 +345,7 @@ const MyAccountPage: React.FC = () => {
 													shipping_address: profile?.shipping_address || '',
 													phone: profile?.phone || '',
 													city: profile?.city || '',
-													postal_code: profile?.postal_code?.toString() || '',
+													postal_code: profile?.postal_code || '',
 												})
 											}}
 											variant='outline'

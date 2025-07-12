@@ -18,6 +18,7 @@ import MyAccountPage from './pages/MyAccountPage'
 import ContactPage from './pages/ContactPage'
 import NotFound from './pages/NotFound'
 import AdminPage from './pages/AdminPage'
+import UserManagementPage from './pages/UserManagementPage'
 
 const queryClient = new QueryClient()
 
@@ -41,6 +42,7 @@ function App() {
 										<Route path='/mi-cuenta' element={<MyAccountPage />} />
 										<Route path='/auth' element={<AuthPage />} />
 										<Route path='/admin' element={<AdminPage />} />
+										<Route path='/admin/usuarios' element={<UserManagementPage />} />
 										<Route path='*' element={<NotFound />} />
 									</Routes>
 									<Toaster />

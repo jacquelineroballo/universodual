@@ -1,15 +1,23 @@
 import { useState, useEffect, createContext, useContext, ReactNode } from 'react'
-import { User, Session } from '@supabase/supabase-js'
-import { supabase } from '@/integrations/supabase/client'
+
+interface User {
+	id: string
+	email: string
+	full_name?: string
+	role: 'admin' | 'user'
+	created_at: string
+}
 
 interface AuthContextType {
 	user: User | null
-	session: Session | null
 	loading: boolean
 	isAdmin: boolean
 	signUp: (email: string, password: string, fullName?: string) => Promise<{ error: any }>
 	signIn: (email: string, password: string) => Promise<{ error: any }>
 	signOut: () => Promise<void>
+	getAllUsers: () => User[]
+	updateUserRole: (userId: string, role: 'admin' | 'user') => Promise<{ error: any }>
+	deleteUser: (userId: string) => Promise<{ error: any }>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -20,12 +28,14 @@ export const useAuth = () => {
 		console.error('useAuth must be used within an AuthProvider')
 		return {
 			user: null,
-			session: null,
 			loading: false,
 			isAdmin: false,
 			signUp: async () => ({ error: new Error('Auth not initialized') }),
 			signIn: async () => ({ error: new Error('Auth not initialized') }),
 			signOut: async () => {},
+			getAllUsers: () => [],
+			updateUserRole: async () => ({ error: new Error('Auth not initialized') }),
+			deleteUser: async () => ({ error: new Error('Auth not initialized') }),
 		}
 	}
 	return context
@@ -37,128 +47,142 @@ interface AuthProviderProps {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
 	const [user, setUser] = useState<User | null>(null)
-	const [session, setSession] = useState<Session | null>(null)
 	const [loading, setLoading] = useState(true)
-	const [isAdmin, setIsAdmin] = useState(false)
 
-	// Lista de emails de administradores
-	const adminEmails = ['jacqueline.roballo@syloper.com', 'admin@universodual.com']
+	const superAdminEmail = 'admin@universodual.com'
 
 	useEffect(() => {
 		console.log('AuthProvider: Initializing auth state')
 
-		const savedSession = localStorage.getItem('supabase_session')
-		const savedUser = localStorage.getItem('supabase_user')
+		const savedUser = localStorage.getItem('current_user')
 
-		if (savedSession && savedUser) {
+		if (savedUser) {
 			try {
-				const parsedSession = JSON.parse(savedSession)
 				const parsedUser = JSON.parse(savedUser)
-				console.log('AuthProvider: Loaded saved session')
-				setSession(parsedSession)
+				console.log('AuthProvider: Loaded saved user:', parsedUser.email)
 				setUser(parsedUser)
-				setIsAdmin(adminEmails.includes(parsedUser.email))
 			} catch (error) {
-				console.error('Error parsing saved auth data:', error)
-				localStorage.removeItem('supabase_session')
-				localStorage.removeItem('supabase_user')
+				console.error('Error parsing saved user data:', error)
+				localStorage.removeItem('current_user')
 			}
 		}
 
-		const {
-			data: { subscription },
-		} = supabase.auth.onAuthStateChange((event, session) => {
-			console.log('AuthProvider: Auth state changed:', event, session?.user?.email)
-			setSession(session)
-			setUser(session?.user ?? null)
-			setIsAdmin(session?.user ? adminEmails.includes(session.user.email) : false)
-			setLoading(false)
-
-			if (session && session.user) {
-				localStorage.setItem('supabase_session', JSON.stringify(session))
-				localStorage.setItem('supabase_user', JSON.stringify(session.user))
-			} else {
-				localStorage.removeItem('supabase_session')
-				localStorage.removeItem('supabase_user')
-			}
-		})
-
-		supabase.auth
-			.getSession()
-			.then(({ data: { session } }) => {
-				console.log('AuthProvider: Got existing session:', session?.user?.email)
-				setSession(session)
-				setUser(session?.user ?? null)
-				setIsAdmin(session?.user ? adminEmails.includes(session.user.email) : false)
-				setLoading(false)
-
-				if (session && session.user) {
-					localStorage.setItem('supabase_session', JSON.stringify(session))
-					localStorage.setItem('supabase_user', JSON.stringify(session.user))
-				}
-			})
-			.catch((error) => {
-				console.error('AuthProvider: Error getting session:', error)
-				setLoading(false)
-			})
-
-		return () => {
-			console.log('AuthProvider: Cleaning up subscription')
-			subscription.unsubscribe()
-		}
+		setLoading(false)
 	}, [])
+
+	const getAllUsers = (): User[] => {
+		try {
+			const users = localStorage.getItem('app_users')
+			return users ? JSON.parse(users) : []
+		} catch (error) {
+			console.error('Error getting users:', error)
+			return []
+		}
+	}
+
+	const saveUsers = (users: User[]) => {
+		localStorage.setItem('app_users', JSON.stringify(users))
+	}
 
 	const signUp = async (email: string, password: string, fullName?: string) => {
 		console.log('AuthProvider: Signing up user:', email)
-		const redirectUrl = `${window.location.origin}/`
 
-		const { error } = await supabase.auth.signUp({
-			email,
-			password,
-			options: {
-				emailRedirectTo: redirectUrl,
-				data: {
-					full_name: fullName,
-				},
-			},
-		})
+		const users = getAllUsers()
+		const existingUser = users.find((u) => u.email === email)
 
-		if (error) {
-			console.error('AuthProvider: Sign up error:', error)
+		if (existingUser) {
+			return { error: { message: 'Este email ya está registrado' } }
 		}
 
-		return { error }
+		const newUser: User = {
+			id: Date.now().toString(),
+			email,
+			full_name: fullName || email,
+			role: email === superAdminEmail ? 'admin' : 'user',
+			created_at: new Date().toISOString(),
+		}
+
+		users.push(newUser)
+		saveUsers(users)
+
+		// Save password (in a real app, this should be hashed)
+		const passwords = JSON.parse(localStorage.getItem('app_passwords') || '{}')
+		passwords[email] = password
+		localStorage.setItem('app_passwords', JSON.stringify(passwords))
+
+		return { error: null }
 	}
 
 	const signIn = async (email: string, password: string) => {
 		console.log('AuthProvider: Signing in user:', email)
-		const { error } = await supabase.auth.signInWithPassword({
-			email,
-			password,
-		})
 
-		if (error) {
-			console.error('AuthProvider: Sign in error:', error)
+		const users = getAllUsers()
+		const foundUser = users.find((u) => u.email === email)
+
+		if (!foundUser) {
+			return { error: { message: 'Usuario no encontrado' } }
 		}
 
-		return { error }
+		// Check password (in a real app, this should be properly hashed and verified)
+		const passwords = JSON.parse(localStorage.getItem('app_passwords') || '{}')
+		if (passwords[email] !== password) {
+			return { error: { message: 'Contraseña incorrecta' } }
+		}
+
+		setUser(foundUser)
+		localStorage.setItem('current_user', JSON.stringify(foundUser))
+
+		return { error: null }
 	}
 
 	const signOut = async () => {
 		console.log('AuthProvider: Signing out user')
-		await supabase.auth.signOut()
-		localStorage.removeItem('supabase_session')
-		localStorage.removeItem('supabase_user')
+		setUser(null)
+		localStorage.removeItem('current_user')
 	}
+
+	const updateUserRole = async (userId: string, role: 'admin' | 'user') => {
+		if (user?.email !== superAdminEmail) {
+			return { error: { message: 'No tienes permisos para realizar esta acción' } }
+		}
+
+		const users = getAllUsers()
+		const userIndex = users.findIndex((u) => u.id === userId)
+
+		if (userIndex === -1) {
+			return { error: { message: 'Usuario no encontrado' } }
+		}
+
+		users[userIndex].role = role
+		saveUsers(users)
+
+		return { error: null }
+	}
+
+	const deleteUser = async (userId: string) => {
+		if (user?.email !== superAdminEmail) {
+			return { error: { message: 'No tienes permisos para realizar esta acción' } }
+		}
+
+		const users = getAllUsers()
+		const filteredUsers = users.filter((u) => u.id !== userId)
+		saveUsers(filteredUsers)
+
+		return { error: null }
+	}
+
+	const isAdmin = user?.role === 'admin' || user?.email === superAdminEmail
 
 	const value = {
 		user,
-		session,
 		loading,
 		isAdmin,
 		signUp,
 		signIn,
 		signOut,
+		getAllUsers,
+		updateUserRole,
+		deleteUser,
 	}
 
 	console.log(

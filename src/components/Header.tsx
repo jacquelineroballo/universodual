@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ShoppingCart, Star, Settings } from 'lucide-react'
+import { ShoppingCart, Settings, Users, Star } from 'lucide-react'
 import { CartItem } from '../types/Product'
 import { Button } from './ui/button'
 import AuthButton from './AuthButton'
@@ -71,7 +71,6 @@ const Header: React.FC<HeaderProps> = ({ cartItems, onCartClick }) => {
 
 					{/* Carrito */}
 					<div className='flex items-center space-x-4'>
-						{/* Admin button - only show when user is logged in */}
 						{user && isAdmin && (
 							<Button
 								onClick={() => navigate('/admin')}
@@ -83,6 +82,33 @@ const Header: React.FC<HeaderProps> = ({ cartItems, onCartClick }) => {
 								Admin
 							</Button>
 						)}
+
+						{user && user.email === 'admin@universodual.com' && (
+							<Button
+								onClick={() => navigate('/admin/usuarios')}
+								variant='outline'
+								size='sm'
+								className='font-montserrat bg-gradient-to-r from-mystic-lavender/20 to-mystic-rose/20 hover:from-mystic-lavender/40 hover:to-mystic-rose/40 text-gray-800 border border-mystic-lavender/30'
+							>
+								<Users className='w-4 h-4 mr-2' />
+								Usuarios
+							</Button>
+						)}
+
+						<AuthButton />
+
+						<Button
+							onClick={onCartClick}
+							className='bg-mystic-lavender hover:bg-mystic-rose text-gray-800 relative'
+							size='sm'
+						>
+							<ShoppingCart className='w-5 h-5' />
+							{totalItems > 0 && (
+								<span className='absolute -top-2 -right-2 bg-mystic-gold text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold'>
+									{totalItems}
+								</span>
+							)}
+						</Button>
 					</div>
 				</div>
 			</div>
