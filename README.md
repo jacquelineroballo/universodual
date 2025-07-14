@@ -1,7 +1,12 @@
 
 # 🌌 Universo Dual – Tienda Esotérica Online creada como proyecto final para el curso de Tech Adultos - React.js
 
-Universo Dual es una tienda digital de productos místicos, especializada en velas artesanales, inciensos y artículos de ritual. Esta SPA moderna, construida con React y TypeScript, combina estética, fluidez y espiritualidad en una sola experiencia.
+Universo Dual es una tienda digital de productos místicos, especializada en velas artesanales, inciensos y artículos de ritual. 
+Esta SPA moderna, construida con React y TypeScript, combina estética, fluidez y espiritualidad en una sola experiencia.
+
+<img width="1920" height="1027" alt="image" src="https://github.com/user-attachments/assets/1f1b8219-d232-4e70-ab7d-2fc962543753" />
+
+<img width="1920" height="2973" alt="image" src="https://github.com/user-attachments/assets/753cc2b5-50bd-402c-bd33-994b29eab298" />
 
 ## 🧰 Tecnologías Utilizadas
 
