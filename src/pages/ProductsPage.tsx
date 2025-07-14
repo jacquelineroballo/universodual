@@ -57,7 +57,7 @@ const ProductsPageContent: React.FC = () => {
 		return (
 			<>
 				<SEO title='Cargando productos...' />
-				<div className='min-h-screen bg-white font-montserrat'>
+				<div className='min-h-screen font-montserrat'>
 					<Header cartItems={cartItems} onCartClick={() => setIsCartOpen(true)} />
 					<LoadingSpinner />
 				</div>
@@ -69,7 +69,7 @@ const ProductsPageContent: React.FC = () => {
 		return (
 			<>
 				<SEO title='Error al cargar productos' />
-				<div className='min-h-screen bg-white font-montserrat'>
+				<div className='min-h-screen font-montserrat'>
 					<Header cartItems={cartItems} onCartClick={() => setIsCartOpen(true)} />
 					<ErrorMessage message={error} onRetry={fetchProducts} />
 				</div>
@@ -85,10 +85,13 @@ const ProductsPageContent: React.FC = () => {
 				keywords='catálogo productos esotéricos, velas artesanales, inciensos, cristales, accesorios místicos, tienda online'
 			/>
 
-			<div className='min-h-screen bg-gradient-to-br from-mystic-cream via-mystic-lavender/10 to-mystic-beige/20 font-montserrat'>
+			<div className='min-h-screen font-montserrat'>
 				<Header cartItems={cartItems} onCartClick={() => setIsCartOpen(true)} />
 
-				<main className='container mx-auto px-4 py-8' role='main'>
+				<main
+					className='container mx-auto bg-gradient-to-br from-mystic-lavender via-mystic-cream to-mystic-rose px-4 py-8'
+					role='main'
+				>
 					<ProductsHeader />
 
 					<ProductsFilters

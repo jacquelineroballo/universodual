@@ -22,7 +22,7 @@ const ProductList: React.FC<ProductListProps> = ({
 	onRetry,
 }) => {
 	return (
-		<section className='py-12 bg-gradient-to-br from-mystic-cream via-mystic-lavender/20 to-mystic-beige/30'>
+		<section className='bg-gradient-to-br from-mystic-cream via-mystic-rose to-mystic-lavander py-10'>
 			<div className='container mx-auto px-4'>
 				<div className='text-center mb-12'>
 					<h2 className='font-playfair text-4xl font-bold text-gray-800 mb-4'>
@@ -59,7 +59,6 @@ const ProductList: React.FC<ProductListProps> = ({
 						))}
 					</div>
 				)}
-				
 			</div>
 		</section>
 	)

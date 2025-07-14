@@ -29,7 +29,7 @@ const AuthButton: React.FC = () => {
 	return (
 		<Button
 			onClick={() => navigate('/auth')}
-			className='bg-gradient-to-r from-mystic-beige to-mystic-gold hover:from-mystic-gold hover:to-mystic-rose text-gray-800 font-montserrat transition-all duration-300 shadow-md hover:shadow-lg'
+			className='bg-gradient-to-r from-mystic-beige to-mystic-gold hover:from-mystic-gold hover:to-mystic-rose text-gray-800 font-montserrat transition-all duration-300 shadow-md hover:shadow-lg rounded-xl'
 		>
 			Iniciar Sesión
 		</Button>

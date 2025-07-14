@@ -43,7 +43,7 @@ const ProductDetailContent: React.FC = () => {
 		return (
 			<>
 				<SEO title='Cargando producto...' />
-				<div className='min-h-screen bg-white font-montserrat'>
+				<div className='min-h-screen bg-gradient-to-br from-mystic-lavender via-mystic-cream to-mystic-rose font-montserrat'>
 					<Header cartItems={cartItems} onCartClick={() => {}} />
 					<LoadingSpinner />
 				</div>
@@ -55,7 +55,7 @@ const ProductDetailContent: React.FC = () => {
 		return (
 			<>
 				<SEO title='Error al cargar producto' />
-				<div className='min-h-screen bg-white font-montserrat'>
+				<div className='min-h-screen bg-gradient-to-br from-mystic-lavender via-mystic-cream to-mystic-rose font-montserrat'>
 					<Header cartItems={cartItems} onCartClick={() => {}} />
 					<ErrorMessage message={error} onRetry={fetchProducts} />
 				</div>
@@ -67,7 +67,7 @@ const ProductDetailContent: React.FC = () => {
 		return (
 			<>
 				<SEO title='Producto no encontrado' />
-				<div className='min-h-screen bg-white font-montserrat'>
+				<div className='min-h-screen bg-gradient-to-br from-mystic-lavender via-mystic-cream to-mystic-rose font-montserrat'>
 					<Header cartItems={cartItems} onCartClick={() => {}} />
 					<div className='container mx-auto px-4 py-12'>
 						<div className='text-center'>
@@ -97,7 +97,7 @@ const ProductDetailContent: React.FC = () => {
 				type='product'
 			/>
 
-			<div className='min-h-screen bg-white font-montserrat'>
+			<div className='min-h-screen bg-gradient-to-br from-mystic-lavender via-mystic-cream to-mystic-rose font-montserrat'>
 				<Header cartItems={cartItems} onCartClick={() => {}} />
 
 				<main className='container mx-auto px-4 py-8' role='main'>

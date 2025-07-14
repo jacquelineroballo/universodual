@@ -6,7 +6,7 @@ const OurHistoryPage: React.FC = () => {
 	const { cartItems } = useCart()
 
 	return (
-		<div className='min-h-screen bg-white'>
+		<div className='min-h-screen bg-gradient-to-br from-mystic-lavender via-mystic-cream to-mystic-rose'>
 			<Header cartItems={cartItems} onCartClick={() => {}} />
 
 			<main className='container mx-auto px-4 py-12'>
@@ -16,7 +16,7 @@ const OurHistoryPage: React.FC = () => {
 					</h1>
 
 					<div className='prose prose-lg mx-auto'>
-						<div className='bg-gradient-to-br from-mystic-rose via-mystic-cream to-mystic-lavender opacity-80 p-8 rounded-lg shadow-lg mb-12'>
+						<div className='bg-white/60 backdrop-blur-sm rounded-lg p-4 sm:p-6 mb-8 shadow-lg border border-mystic-lavender/20 p-8 rounded-xl shadow-lg mb-12'>
 							<p className='font-montserrat text-gray-700 mb-6 leading-relaxed'>
 								En el corazón de nuestra ciudad, Universo Dual nació de un sueño compartido: crear
 								un espacio donde la magia y la artesanía se encuentran. Fundado en 2020, durante un
@@ -33,7 +33,7 @@ const OurHistoryPage: React.FC = () => {
 						</div>
 
 						<div className='grid md:grid-cols-2 gap-8 mb-12'>
-							<div className='bg-gradient-to-br from-mystic-lavender via-mystic-cream to-mystic-rose opacity-70 p-6 rounded-lg shadow-md'>
+							<div className='bg-white/60 backdrop-blur-sm p-4 sm:p-6 mb-8 shadow-lg border border-mystic-lavender/20 p-8 rounded-xl p-6 shadow-md'>
 								<h2 className='font-playfair text-2xl font-bold text-mystic-gold mb-4'>
 									Nuestra Misión
 								</h2>
@@ -44,7 +44,7 @@ const OurHistoryPage: React.FC = () => {
 								</p>
 							</div>
 
-							<div className='bg-gradient-to-br  from-mystic-cream via-mystic-rose to-mystic-lavender opacity-70 p-6 rounded-lg shadow-md'>
+							<div className='bg-white/60 backdrop-blur-sm p-4 sm:p-6 mb-8 shadow-lg border border-mystic-lavender/20 p-8 rounded-xl shadow-md'>
 								<h2 className='font-playfair text-2xl font-bold text-mystic-gold mb-4'>
 									Nuestros Valores
 								</h2>
@@ -58,7 +58,7 @@ const OurHistoryPage: React.FC = () => {
 						</div>
 
 						<div className='text-center'>
-							<p className='font-montserrat text-gray-700 italic'>
+							<p className='font-montserrat text-gray-700 italic font-bold'>
 								"En cada producto que creamos, vertemos nuestra intención de traer luz, equilibrio y
 								transformación a la vida de nuestros clientes."
 							</p>

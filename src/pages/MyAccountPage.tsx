@@ -185,7 +185,7 @@ const MyAccountPage: React.FC = () => {
 	}
 
 	return (
-		<div className='min-h-screen bg-gradient-to-br from-mystic-lavender/20 to-mystic-cream/20 font-montserrat'>
+		<div className='min-h-screen bg-gradient-to-br from-mystic-lavender via-mystic-cream to-mystic-rose font-montserrat'>
 			<Header cartItems={cartItems} onCartClick={() => {}} />
 
 			<div className='container mx-auto px-4 py-8'>
@@ -202,7 +202,7 @@ const MyAccountPage: React.FC = () => {
 					</div>
 
 					{/* Profile Card */}
-					<div className='bg-white rounded-lg shadow-lg p-8 mb-6'>
+					<div className='bg-white/60 backdrop-blur-sm p-4 sm:p-6 mb-8 shadow-lg border border-mystic-lavender/20 rounded-xl shadow-lg p-8 mb-6'>
 						<div className='flex items-center gap-4 mb-6'>
 							<div className='w-16 h-16 bg-mystic-lavender rounded-full flex items-center justify-center'>
 								<User className='w-8 h-8 text-gray-600' />
