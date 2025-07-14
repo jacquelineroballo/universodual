@@ -81,7 +81,7 @@ const IndexContent = () => {
 			<main role='main'>
 				<Hero onShopNowClick={scrollToProducts} />
 				<section id='productos' aria-labelledby='productos-heading'>
-					<div className='container mx-auto px-0'>
+					<div className='container-fluid mx-auto px-0'>
 						<ProductList
 							products={productsToShow}
 							onAddToCart={handleAddToCart}
