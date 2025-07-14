@@ -19,6 +19,9 @@ import ContactPage from './pages/ContactPage'
 import NotFound from './pages/NotFound'
 import AdminPage from './pages/AdminPage'
 import UserManagementPage from './pages/UserManagementPage'
+import ContactManagementPage from './pages/ContactManagementPage'
+import { ProductsProvider } from './contexts/ProductsContext'
+import ProductManagementPage from './pages/ProductManagementPage'
 
 const queryClient = new QueryClient()
 
@@ -31,22 +34,26 @@ function App() {
 						<BrowserRouter>
 							<AuthProvider>
 								<CarritoProvider>
-									<Routes>
-										<Route path='/' element={<Index />} />
-										<Route path='/productos' element={<ProductsPage />} />
-										<Route path='/categoria/:categoria' element={<CategoryPage />} />
-										<Route path='/producto/:id' element={<ProductDetailPage />} />
-										<Route path='/contacto' element={<ContactPage />} />
-										<Route path='/checkout' element={<CheckoutPage />} />
-										<Route path='/checkout/exito' element={<CheckoutSuccessPage />} />
-										<Route path='/mi-cuenta' element={<MyAccountPage />} />
-										<Route path='/auth' element={<AuthPage />} />
-										<Route path='/admin' element={<AdminPage />} />
-										<Route path='/admin/usuarios' element={<UserManagementPage />} />
-										<Route path='*' element={<NotFound />} />
-									</Routes>
-									<Toaster />
-									<Sonner />
+									<ProductsProvider>
+										<Routes>
+											<Route path='/' element={<Index />} />
+											<Route path='/productos' element={<ProductsPage />} />
+											<Route path='/categoria/:categoria' element={<CategoryPage />} />
+											<Route path='/producto/:id' element={<ProductDetailPage />} />
+											<Route path='/contacto' element={<ContactPage />} />
+											<Route path='/checkout' element={<CheckoutPage />} />
+											<Route path='/checkout/exito' element={<CheckoutSuccessPage />} />
+											<Route path='/mi-cuenta' element={<MyAccountPage />} />
+											<Route path='/auth' element={<AuthPage />} />
+											<Route path='/admin' element={<AdminPage />} />
+											<Route path='/admin/usuarios' element={<UserManagementPage />} />
+											<Route path='/admin/contactos' element={<ContactManagementPage />} />
+											<Route path='/admin/productos' element={<ProductManagementPage />} />
+											<Route path='*' element={<NotFound />} />
+										</Routes>
+										<Toaster />
+										<Sonner />
+									</ProductsProvider>
 								</CarritoProvider>
 							</AuthProvider>
 						</BrowserRouter>

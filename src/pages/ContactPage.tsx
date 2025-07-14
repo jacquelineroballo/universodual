@@ -1,248 +1,171 @@
-import React from 'react'
-import { useState } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from '@/components/ui/form'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import { Mail, Phone, Clock, MapPin } from 'lucide-react'
-import supabase from '@/integrations/supabase/client'
-import { useToast } from '@/hooks/use-toast'
-import Header from '@/components/Header'
-import { useCarrito } from '@/contexts/CarritoContext'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Button } from '../components/ui/button'
+import { Input } from '../components/ui/input'
+import { Textarea } from '../components/ui/textarea'
+import { useToast } from '../hooks/use-toast'
+import { Send, ArrowLeft, Mail, User, MessageSquare } from 'lucide-react'
+import Header from '../components/Header'
+import { useCarrito } from '../contexts/CarritoContext'
 
-const contactSchema = z.object({
-	name: z.string().min(2, 'El nombre debe tener al menos 2 caracteres'),
-	email: z.string().email('Ingresa un email válido'),
-	message: z.string().min(10, 'El mensaje debe tener al menos 10 caracteres'),
-})
+const ContactPage: React.FC = () => {
+	const [name, setName] = useState('')
+	const [email, setEmail] = useState('')
+	const [message, setMessage] = useState('')
+	const [loading, setLoading] = useState(false)
 
-type ContactFormData = z.infer<typeof contactSchema>
-
-const ContactPage = () => {
-	const [isSubmitting, setIsSubmitting] = useState(false)
+	const navigate = useNavigate()
 	const { toast } = useToast()
 	const { cartItems } = useCarrito()
 
-	const form = useForm<ContactFormData>({
-		resolver: zodResolver(contactSchema),
-		defaultValues: {
-			name: '',
-			email: '',
-			message: '',
-		},
-	})
-
-	const onSubmit = async (data: ContactFormData) => {
-		setIsSubmitting(true)
+	const handleSubmit = async (e: React.FormEvent) => {
+		e.preventDefault()
+		setLoading(true)
 
 		try {
-			const { error } = await supabase.from('contact_messages').insert([
-				{
-					name: data.name,
-					email: data.email,
-					message: data.message,
-				},
-			])
+			// Obtener mensajes existentes de localStorage
+			const existingMessages = JSON.parse(localStorage.getItem('contact_messages') || '[]')
 
-			if (error) {
-				throw error
+			// Crear nuevo mensaje
+			const newMessage = {
+				id: Date.now().toString(),
+				name,
+				email,
+				message,
+				status: 'new',
+				created_at: new Date().toISOString(),
 			}
+
+			// Agregar el nuevo mensaje
+			existingMessages.push(newMessage)
+
+			// Guardar en localStorage
+			localStorage.setItem('contact_messages', JSON.stringify(existingMessages))
 
 			toast({
 				title: '¡Mensaje enviado!',
-				description: 'Te contactaremos pronto. Gracias por escribirnos.',
+				description: 'Gracias por contactarnos. Te responderemos pronto.',
 			})
 
-			form.reset()
+			// Limpiar formulario
+			setName('')
+			setEmail('')
+			setMessage('')
 		} catch (error) {
 			console.error('Error sending message:', error)
 			toast({
 				title: 'Error',
-				description: 'No pudimos enviar tu mensaje. Inténtalo de nuevo.',
+				description: 'No se pudo enviar el mensaje. Intenta nuevamente.',
 				variant: 'destructive',
 			})
 		} finally {
-			setIsSubmitting(false)
+			setLoading(false)
 		}
 	}
 
 	return (
-		<div className='min-h-screen bg-white font-montserrat'>
+		<div className='min-h-screen bg-gradient-to-br from-mystic-cream via-mystic-lavender/10 to-mystic-beige/20 font-montserrat'>
 			<Header cartItems={cartItems} onCartClick={() => {}} />
 
-			<main>
-				{/* Hero Section */}
-				<section className='bg-gradient-to-r from-mystic-lavender to-mystic-rose py-16'>
-					<div className='container mx-auto px-4 text-center'>
-						<h1 className='font-playfair text-4xl md:text-5xl font-bold text-gray-800 mb-4'>
-							Contacto
-						</h1>
-						<p className='font-montserrat text-lg text-gray-600 max-w-2xl mx-auto'>
-							Estamos acá para acompañarte en tu viaje espiritual. Contactanos y descubrí el poder
-							de lo místico.
-						</p>
+			<main className='container mx-auto px-4 py-8'>
+				<div className='max-w-2xl mx-auto'>
+					{/* Header */}
+					<div className='flex items-center gap-4 mb-8'>
+						<button
+							onClick={() => navigate('/')}
+							className='p-2 hover:bg-white rounded-full transition-colors'
+						>
+							<ArrowLeft className='w-5 h-5 text-gray-600' />
+						</button>
+						<div>
+							<h1 className='font-playfair text-3xl font-bold text-gray-800'>Contacto</h1>
+							<p className='text-gray-600 mt-2'>
+								Nos encantaría escucharte. Envíanos un mensaje y te responderemos pronto.
+							</p>
+						</div>
 					</div>
-				</section>
 
-				<section className='py-16'>
-					<div className='container mx-auto px-4'>
-						<div className='grid md:grid-cols-2 gap-12 max-w-6xl mx-auto'>
-							{/* Contact Information */}
-							<div className='space-y-8'>
-								<div>
-									<h2 className='font-playfair text-3xl font-bold text-gray-800 mb-6'>
-										Información de Contacto
-									</h2>
-									<p className='font-montserrat text-gray-600 mb-8'>
-										¿Tenés alguna pregunta sobre nuestros productos? Estamos acá para
-										ayudarte.
-									</p>
-								</div>
-
-								<div className='space-y-6'>
-									<div className='flex items-start space-x-4'>
-										<div className='bg-mystic-lavender p-3 rounded-lg'>
-											<Mail className='w-6 h-6 text-gray-700' />
-										</div>
-										<div>
-											<h3 className='font-montserrat font-semibold text-gray-800 mb-1'>Email</h3>
-											<p className='font-montserrat text-gray-600'>info@universodual.com</p>
-										</div>
-									</div>
-
-									<div className='flex items-start space-x-4'>
-										<div className='bg-mystic-lavender p-3 rounded-lg'>
-											<Phone className='w-6 h-6 text-gray-700' />
-										</div>
-										<div>
-											<h3 className='font-montserrat font-semibold text-gray-800 mb-1'>WhatsApp</h3>
-											<p className='font-montserrat text-gray-600'>+54 9 11 1234-5678</p>
-										</div>
-									</div>
-
-									<div className='flex items-start space-x-4'>
-										<div className='bg-mystic-lavender p-3 rounded-lg'>
-											<Clock className='w-6 h-6 text-gray-700' />
-										</div>
-										<div>
-											<h3 className='font-montserrat font-semibold text-gray-800 mb-1'>Horarios</h3>
-											<p className='font-montserrat text-gray-600'>Lunes a Viernes 9:00 - 18:00</p>
-										</div>
-									</div>
-
-									<div className='flex items-start space-x-4'>
-										<div className='bg-mystic-lavender p-3 rounded-lg'>
-											<MapPin className='w-6 h-6 text-gray-700' />
-										</div>
-										<div>
-											<h3 className='font-montserrat font-semibold text-gray-800 mb-1'>
-												Ubicación
-											</h3>
-											<p className='font-montserrat text-gray-600'>Buenos Aires, Argentina</p>
-										</div>
-									</div>
-								</div>
+					{/* Contact Form */}
+					<div className='bg-white rounded-lg shadow-lg p-8'>
+						<form onSubmit={handleSubmit} className='space-y-6'>
+							<div>
+								<label htmlFor='name' className='block text-sm font-medium text-gray-700 mb-2'>
+									<User className='w-4 h-4 inline mr-2' />
+									Nombre completo
+								</label>
+								<Input
+									id='name'
+									type='text'
+									value={name}
+									onChange={(e) => setName(e.target.value)}
+									required
+									className='w-full'
+									placeholder='Tu nombre completo'
+								/>
 							</div>
 
-							{/* Contact Form */}
 							<div>
-								<Card className='shadow-lg border-0'>
-									<CardHeader className='bg-gradient-to-r from-mystic-lavender to-mystic-rose text-center'>
-										<CardTitle className='font-playfair text-2xl text-gray-800'>
-											Envíanos un Mensaje
-										</CardTitle>
-										<CardDescription className='font-montserrat text-gray-600'>
-											Completa el formulario y te responderemos pronto
-										</CardDescription>
-									</CardHeader>
-									<CardContent className='p-6'>
-										<Form {...form}>
-											<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
-												<FormField
-													control={form.control}
-													name='name'
-													render={({ field }) => (
-														<FormItem>
-															<FormLabel className='font-montserrat text-gray-700'>
-																Nombre completo
-															</FormLabel>
-															<FormControl>
-																<Input
-																	placeholder='Tu nombre completo'
-																	className='font-montserrat'
-																	{...field}
-																/>
-															</FormControl>
-															<FormMessage />
-														</FormItem>
-													)}
-												/>
+								<label htmlFor='email' className='block text-sm font-medium text-gray-700 mb-2'>
+									<Mail className='w-4 h-4 inline mr-2' />
+									Email
+								</label>
+								<Input
+									id='email'
+									type='email'
+									value={email}
+									onChange={(e) => setEmail(e.target.value)}
+									required
+									className='w-full'
+									placeholder='tu@email.com'
+								/>
+							</div>
 
-												<FormField
-													control={form.control}
-													name='email'
-													render={({ field }) => (
-														<FormItem>
-															<FormLabel className='font-montserrat text-gray-700'>Email</FormLabel>
-															<FormControl>
-																<Input
-																	type='email'
-																	placeholder='tu@email.com'
-																	className='font-montserrat'
-																	{...field}
-																/>
-															</FormControl>
-															<FormMessage />
-														</FormItem>
-													)}
-												/>
+							<div>
+								<label htmlFor='message' className='block text-sm font-medium text-gray-700 mb-2'>
+									<MessageSquare className='w-4 h-4 inline mr-2' />
+									Mensaje
+								</label>
+								<Textarea
+									id='message'
+									value={message}
+									onChange={(e) => setMessage(e.target.value)}
+									required
+									className='w-full min-h-[120px]'
+									placeholder='Escribe tu mensaje aquí...'
+								/>
+							</div>
 
-												<FormField
-													control={form.control}
-													name='message'
-													render={({ field }) => (
-														<FormItem>
-															<FormLabel className='font-montserrat text-gray-700'>
-																Mensaje
-															</FormLabel>
-															<FormControl>
-																<Textarea
-																	placeholder='Cuéntanos en qué podemos ayudarte...'
-																	className='font-montserrat min-h-[120px] resize-none'
-																	{...field}
-																/>
-															</FormControl>
-															<FormMessage />
-														</FormItem>
-													)}
-												/>
+							<Button
+								type='submit'
+								disabled={loading}
+								className='w-full bg-mystic-beige hover:bg-mystic-gold text-gray-800 font-semibold py-3'
+							>
+								{loading ? (
+									'Enviando...'
+								) : (
+									<>
+										<Send className='w-4 h-4 mr-2' />
+										Enviar Mensaje
+									</>
+								)}
+							</Button>
+						</form>
+					</div>
 
-												<Button
-													type='submit'
-													disabled={isSubmitting}
-													className='w-full bg-gradient-to-r from-mystic-lavender to-mystic-rose hover:from-mystic-rose hover:to-mystic-gold text-gray-800 font-montserrat font-semibold py-3 transition-all duration-300'
-												>
-													{isSubmitting ? 'Enviando...' : 'Enviar Mensaje'}
-												</Button>
-											</form>
-										</Form>
-									</CardContent>
-								</Card>
+					{/* Contact Info */}
+					<div className='mt-8 text-center'>
+						<div className='bg-white rounded-lg shadow-lg p-6'>
+							<h2 className='font-playfair text-xl font-bold text-gray-800 mb-4'>
+								Otras formas de contacto
+							</h2>
+							<div className='space-y-2 text-gray-600'>
+								<p>📧 info@universodual.com</p>
+								<p>🕐 Horario de atención: Lunes a Viernes 9:00 - 18:00</p>
+								<p>💫 Te responderemos en menos de 24 horas</p>
 							</div>
 						</div>
 					</div>
-				</section>
+				</div>
 			</main>
 		</div>
 	)
