@@ -1,13 +1,12 @@
 export interface Product {
-	id: string // Changed from number to string to match Supabase UUID
+	id: string
 	name: string
 	price: number
 	image: string
 	description: string
-	category: 'velas' | 'inciensos' | 'cristales' | 'accesorios'
-	inStock: boolean
-	stock?: number
-	featured?: boolean
+	category: string
+	stock: number
+	featured: boolean
 }
 
 export interface CartItem extends Product {

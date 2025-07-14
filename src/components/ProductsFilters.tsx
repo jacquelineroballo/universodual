@@ -28,11 +28,9 @@ const ProductsFilters: React.FC<ProductsFiltersProps> = ({
 		{ value: 'accesorios', label: 'Accesorios Místicos' },
 	]
 
-	console.log('ProductsFilters: Current state', { searchTerm, selectedCategory, totalResults })
-
 	return (
-		<div className='bg-white/60 backdrop-blur-sm rounded-lg p-6 mb-8 shadow-lg border border-mystic-lavender/20'>
-			<div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
+		<div className='bg-white/60 backdrop-blur-sm rounded-lg p-4 sm:p-6 mb-8 shadow-lg border border-mystic-lavender/20'>
+			<div className='grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4'>
 				<SearchBar
 					searchTerm={searchTerm}
 					onSearchChange={onSearchChange}
@@ -47,11 +45,8 @@ const ProductsFilters: React.FC<ProductsFiltersProps> = ({
 					/>
 					<select
 						value={selectedCategory}
-						onChange={(e) => {
-							console.log('ProductsFilters: Category select changed to:', e.target.value)
-							onCategoryChange(e.target.value)
-						}}
-						className='w-full pl-10 pr-4 py-2 border border-mystic-lavender/30 rounded-md font-montserrat focus:border-mystic-gold focus:ring-mystic-gold/20 bg-white'
+						onChange={(e) => onCategoryChange(e.target.value)}
+						className='w-full pl-10 pr-4 py-2 border border-mystic-lavender/30 rounded-md font-montserrat focus:border-mystic-gold focus:ring-mystic-gold/20 bg-white transition-colors duration-200'
 						aria-label='Filtrar productos por categoría'
 					>
 						{categories.map((category) => (
@@ -63,13 +58,15 @@ const ProductsFilters: React.FC<ProductsFiltersProps> = ({
 				</div>
 			</div>
 
-			<div className='flex justify-between items-center text-sm text-gray-600 font-montserrat'>
+			<div className='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-sm text-gray-600 font-montserrat'>
 				<span aria-live='polite' aria-atomic='true'>
 					{totalResults === 0
 						? 'No se encontraron productos'
 						: `Mostrando ${paginatedProductsLength} de ${totalResults} productos`}
 				</span>
-				{searchTerm && <span className='text-mystic-gold'>Resultados para: "{searchTerm}"</span>}
+				{searchTerm && (
+					<span className='text-mystic-gold font-medium'>Resultados para: "{searchTerm}"</span>
+				)}
 			</div>
 		</div>
 	)

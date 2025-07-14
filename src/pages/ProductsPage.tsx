@@ -21,19 +21,6 @@ const ProductsPageContent: React.FC = () => {
 	const { cartItems, addToCart, removeFromCart, updateQuantity, clearCart, getTotalPrice } =
 		useCarrito()
 
-	// Transform MockProducts to Products for search hook
-	const transformedProducts = products.map((product) => ({
-		id: product.id,
-		name: product.name,
-		price: product.price,
-		image: product.image,
-		description: product.description,
-		category: product.category as 'velas' | 'inciensos' | 'cristales' | 'accesorios',
-		inStock: product.stock > 0,
-		stock: product.stock,
-		featured: product.featured,
-	}))
-
 	const {
 		searchTerm,
 		currentPage,
@@ -44,10 +31,10 @@ const ProductsPageContent: React.FC = () => {
 		handleSearchChange,
 		handleCategoryChange,
 		handlePageChange,
-	} = useProductSearch(transformedProducts, 12)
+	} = useProductSearch(products, 12)
 
 	const handleAddToCart = (productId: string) => {
-		const product = transformedProducts.find((p) => p.id === productId)
+		const product = products.find((p) => p.id === productId)
 		if (product) {
 			addToCart(product)
 			const existingItem = cartItems.find((item) => item.id === product.id)

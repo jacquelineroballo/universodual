@@ -21,19 +21,7 @@ const ProductDetailContent: React.FC = () => {
 
 	const handleAddToCart = () => {
 		if (product) {
-			const cartProduct = {
-				id: product.id,
-				name: product.name,
-				price: product.price,
-				image: product.image,
-				description: product.description,
-				category: product.category as 'velas' | 'inciensos' | 'cristales' | 'accesorios',
-				inStock: product.stock > 0,
-				stock: product.stock,
-				featured: product.featured,
-			}
-
-			addToCart(cartProduct)
+			addToCart(product)
 
 			const existingItem = cartItems.find((item) => item.id === product.id)
 
@@ -128,8 +116,9 @@ const ProductDetailContent: React.FC = () => {
 						<div className='relative'>
 							<img
 								src={product.image}
-								alt={product.name}
+								alt={`${product.name} - ${product.category} artesanal para uso esotérico`}
 								className='w-full h-96 lg:h-[500px] object-cover rounded-lg shadow-lg'
+								loading='eager'
 							/>
 							<div className='absolute top-4 right-4'>
 								<span
@@ -140,6 +129,11 @@ const ProductDetailContent: React.FC = () => {
 									{product.stock > 0 ? 'Disponible' : 'Agotado'}
 								</span>
 							</div>
+							{product.featured && (
+								<div className='absolute top-4 left-4 bg-mystic-gold text-white px-3 py-2 rounded-full text-sm font-medium'>
+									Producto Destacado
+								</div>
+							)}
 						</div>
 
 						{/* Información del producto */}
@@ -163,12 +157,15 @@ const ProductDetailContent: React.FC = () => {
 									<span className='font-montserrat text-3xl font-bold text-mystic-gold'>
 										${product.price.toFixed(2)}
 									</span>
+									<span className='text-sm text-gray-500 font-montserrat'>
+										Stock disponible: {product.stock}
+									</span>
 								</div>
 
 								<Button
 									onClick={handleAddToCart}
 									disabled={product.stock === 0}
-									className='w-full bg-mystic-beige hover:bg-mystic-gold text-gray-800 font-montserrat font-medium py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed'
+									className='w-full bg-mystic-beige hover:bg-mystic-gold text-gray-800 font-montserrat font-medium py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200'
 									aria-label={
 										product.stock > 0 ? `Agregar ${product.name} al carrito` : 'Producto sin stock'
 									}

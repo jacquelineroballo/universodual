@@ -51,13 +51,11 @@ export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) 
 		try {
 			setLoading(true)
 			setError(null)
-			console.log('ProductsContext: Fetching products...')
 			const fetchedProducts = await mockApi.getProducts()
-			console.log('ProductsContext: Products fetched:', fetchedProducts)
 			setProducts(fetchedProducts)
 		} catch (err) {
 			const errorMessage = err instanceof Error ? err.message : 'Error desconocido'
-			console.error('ProductsContext: Error fetching products:', err)
+			console.error('Error fetching products:', err)
 			setError(errorMessage)
 			toast({
 				title: 'Error',
@@ -79,9 +77,7 @@ export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) 
 			try {
 				setLoading(true)
 				setError(null)
-				console.log('ProductsContext: Creating product:', productData)
 				const newProduct = await mockApi.createProduct(productData)
-				console.log('ProductsContext: Product created:', newProduct)
 				setProducts((prev) => [...prev, newProduct])
 				toast({
 					title: '¡Éxito!',
@@ -89,7 +85,7 @@ export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) 
 				})
 			} catch (err) {
 				const errorMessage = err instanceof Error ? err.message : 'Error al crear producto'
-				console.error('ProductsContext: Error creating product:', err)
+				console.error('Error creating product:', err)
 				setError(errorMessage)
 				toast({
 					title: 'Error',
@@ -109,10 +105,8 @@ export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) 
 			try {
 				setLoading(true)
 				setError(null)
-				console.log('ProductsContext: Updating product:', id, productData)
 
 				const updatedProduct = await mockApi.updateProduct(id, productData)
-				console.log('ProductsContext: Product updated:', updatedProduct)
 				setProducts((prev) => prev.map((p) => (p.id === id ? updatedProduct : p)))
 				toast({
 					title: '¡Éxito!',
@@ -120,7 +114,7 @@ export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) 
 				})
 			} catch (err) {
 				const errorMessage = err instanceof Error ? err.message : 'Error al actualizar producto'
-				console.error('ProductsContext: Error updating product:', err)
+				console.error('Error updating product:', err)
 				setError(errorMessage)
 				toast({
 					title: 'Error',
@@ -140,9 +134,7 @@ export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) 
 			try {
 				setLoading(true)
 				setError(null)
-				console.log('ProductsContext: Deleting product:', id)
 				await mockApi.deleteProduct(id)
-				console.log('ProductsContext: Product deleted')
 				setProducts((prev) => prev.filter((p) => p.id !== id))
 				toast({
 					title: '¡Éxito!',
@@ -150,7 +142,7 @@ export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) 
 				})
 			} catch (err) {
 				const errorMessage = err instanceof Error ? err.message : 'Error al eliminar producto'
-				console.error('ProductsContext: Error deleting product:', err)
+				console.error('Error deleting product:', err)
 				setError(errorMessage)
 				toast({
 					title: 'Error',

@@ -2,7 +2,6 @@ import React from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useProducts } from '../contexts/ProductsContext'
 import { useCarrito } from '../contexts/CarritoContext'
-import { Product } from '../types/Product'
 import Header from '../components/Header'
 import ProductList from '../components/ProductList'
 import SEO from '../components/SEO'
@@ -16,20 +15,8 @@ const CategoryPage: React.FC = () => {
 	const { products, loading, error, fetchProducts } = useProducts()
 	const { cartItems, addToCart } = useCarrito()
 
-	// Transform MockProducts to Products and filter by category
-	const filteredProducts: Product[] = products
-		.map((product) => ({
-			id: product.id,
-			name: product.name,
-			price: product.price,
-			image: product.image,
-			description: product.description,
-			category: product.category as 'velas' | 'inciensos' | 'cristales' | 'accesorios',
-			inStock: product.stock > 0,
-			stock: product.stock,
-			featured: product.featured,
-		}))
-		.filter((product) => product.category === category)
+	// Filter products by category directly
+	const filteredProducts = products.filter((product) => product.category === category)
 
 	const handleAddToCart = (productId: string) => {
 		const product = filteredProducts.find((p) => p.id === productId)

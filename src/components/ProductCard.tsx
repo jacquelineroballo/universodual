@@ -16,19 +16,25 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onViewP
 				<Link to={`/producto/${product.id}`}>
 					<img
 						src={product.image}
-						alt={product.name}
+						alt={`${product.name} - ${product.category}`}
 						className='w-full h-48 object-cover hover:scale-105 transition-transform duration-300'
+						loading='lazy'
 					/>
 				</Link>
 				<div className='absolute top-2 right-2'>
 					<span
 						className={`px-2 py-1 rounded-full text-xs font-montserrat font-medium ${
-							product.inStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+							product.stock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
 						}`}
 					>
-						{product.inStock ? 'Disponible' : 'Agotado'}
+						{product.stock > 0 ? 'Disponible' : 'Agotado'}
 					</span>
 				</div>
+				{product.featured && (
+					<div className='absolute top-2 left-2 bg-mystic-gold text-white px-2 py-1 rounded-full text-xs font-medium'>
+						Destacado
+					</div>
+				)}
 			</div>
 
 			<div className='p-4'>
@@ -48,10 +54,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onViewP
 
 					<Button
 						onClick={onAddToCart}
-						disabled={!product.inStock}
-						className='bg-mystic-beige hover:bg-mystic-gold text-gray-800 font-montserrat font-medium disabled:opacity-50 disabled:cursor-not-allowed'
+						disabled={product.stock === 0}
+						className='bg-mystic-beige hover:bg-mystic-gold text-gray-800 font-montserrat font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200'
 					>
-						{product.inStock ? 'Agregar' : 'Sin stock'}
+						{product.stock > 0 ? 'Agregar' : 'Sin stock'}
 					</Button>
 				</div>
 			</div>

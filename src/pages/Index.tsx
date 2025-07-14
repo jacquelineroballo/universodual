@@ -45,21 +45,7 @@ const IndexContent = () => {
 	const handleAddToCart = (productId: string) => {
 		const product = products.find((p) => p.id === productId)
 		if (product) {
-			// Transform MockProduct to Product for cart
-			const cartProduct = {
-				id: product.id,
-				name: product.name,
-				price: product.price,
-				image: product.image,
-				description: product.description,
-				category: product.category as 'velas' | 'inciensos' | 'cristales' | 'accesorios',
-				inStock: product.stock > 0,
-				stock: product.stock,
-				featured: product.featured,
-			}
-
-			addToCart(cartProduct)
-
+			addToCart(product)
 			const existingItem = cartItems.find((item) => item.id === product.id)
 
 			toast({
@@ -79,22 +65,14 @@ const IndexContent = () => {
 	}
 
 	// Transform MockProducts to Products for display
-	const displayProducts = products.map((product) => ({
-		id: product.id,
-		name: product.name,
-		price: product.price,
-		image: product.image,
-		description: product.description,
-		category: product.category as 'velas' | 'inciensos' | 'cristales' | 'accesorios',
-		inStock: product.stock > 0,
-		stock: product.stock,
-		featured: product.featured,
-	}))
+	const featuredProducts = products.filter((p) => p.featured)
+	const otherProducts = products.filter((p) => !p.featured)
 
-	// Show featured products first, then others, limit to 8 for homepage
-	const featuredProducts = displayProducts.filter((p) => p.featured)
-	const otherProducts = displayProducts.filter((p) => !p.featured)
 	const productsToShow = [...featuredProducts, ...otherProducts].slice(0, 8)
+
+	function handleViewProduct(productId: string): void {
+		throw new Error('Function not implemented.')
+	}
 
 	return (
 		<>
@@ -135,7 +113,7 @@ const IndexContent = () => {
 										className='inline-block bg-gradient-to-r from-mystic-beige to-mystic-gold hover:from-mystic-gold hover:to-mystic-rose text-gray-800 font-montserrat font-semibold px-8 py-3 rounded-lg hover:shadow-lg transition-all duration-300 transform hover:scale-105'
 										aria-label='Ver todos los productos del catálogo'
 									>
-										Ver Todo el Catálogo ({displayProducts.length} productos)
+										Ver Todo el Catálogo ({products.length} productos)
 									</Link>
 								</div>
 							)}

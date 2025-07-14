@@ -6,15 +6,8 @@ export const useProductSearch = (products: Product[], itemsPerPage: number = 12)
 	const [currentPage, setCurrentPage] = useState(1)
 	const [selectedCategory, setSelectedCategory] = useState<string>('')
 
-	// Filtrar productos basado en búsqueda y categoría
 	const filteredProducts = useMemo(() => {
 		if (!products || products.length === 0) return []
-
-		console.log('useProductSearch: Filtering products', {
-			searchTerm,
-			selectedCategory,
-			totalProducts: products.length,
-		})
 
 		const filtered = products.filter((product) => {
 			const matchesSearch =
@@ -25,44 +18,29 @@ export const useProductSearch = (products: Product[], itemsPerPage: number = 12)
 
 			const matchesCategory = selectedCategory === '' || product.category === selectedCategory
 
-			console.log('Product filter check:', {
-				productName: product.name,
-				productCategory: product.category,
-				selectedCategory,
-				matchesSearch,
-				matchesCategory,
-				included: matchesSearch && matchesCategory,
-			})
-
 			return matchesSearch && matchesCategory
 		})
 
-		console.log('useProductSearch: Filtered results', { filteredCount: filtered.length })
 		return filtered
 	}, [products, searchTerm, selectedCategory])
 
-	// Calcular paginación
 	const totalPages = Math.ceil(filteredProducts.length / itemsPerPage)
 	const startIndex = (currentPage - 1) * itemsPerPage
 	const endIndex = startIndex + itemsPerPage
 	const paginatedProducts = filteredProducts.slice(startIndex, endIndex)
 
-	// Reset página cuando cambian los filtros
 	const handleSearchChange = (term: string) => {
-		console.log('useProductSearch: Search term changed to:', term)
 		setSearchTerm(term)
 		setCurrentPage(1)
 	}
 
 	const handleCategoryChange = (category: string) => {
-		console.log('useProductSearch: Category changed to:', category)
 		setSelectedCategory(category)
 		setCurrentPage(1)
 	}
 
 	const handlePageChange = (page: number) => {
 		setCurrentPage(page)
-		// Scroll to top when changing pages
 		window.scrollTo({ top: 0, behavior: 'smooth' })
 	}
 
