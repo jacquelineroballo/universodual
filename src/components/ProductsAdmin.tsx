@@ -106,7 +106,7 @@ const ProductsAdmin: React.FC = () => {
 
 				<Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
 					<DialogTrigger asChild>
-						<Button className='bg-mystic-beige hover:bg-mystic-gold text-gray-800'>
+						<Button className='bg-mystic-beige hover:bg-mystic-gold text-gray-800 rounded-xl'>
 							<Plus className='w-4 h-4 mr-2' />
 							Agregar Producto
 						</Button>

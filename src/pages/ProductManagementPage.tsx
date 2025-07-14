@@ -37,7 +37,7 @@ const ProductManagementPage: React.FC = () => {
 	}
 
 	return (
-		<div className='min-h-screen bg-gradient-to-br from-mystic-cream via-mystic-lavender/10 to-mystic-beige/20 font-montserrat'>
+		<div className='min-h-screen bg-gradient-to-br from-mystic-lavender via-mystic-cream to-mystic-rose font-montserrat'>
 			<Header cartItems={cartItems} onCartClick={() => {}} />
 
 			<main className='container mx-auto px-4 py-8'>

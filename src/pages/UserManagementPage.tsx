@@ -216,7 +216,7 @@ const UserManagementPage: React.FC = () => {
 	}
 
 	return (
-		<div className='min-h-screen bg-gradient-to-br from-mystic-cream via-mystic-lavender/10 to-mystic-beige/20 font-montserrat'>
+		<div className='min-h-screen bg-gradient-to-br from-mystic-lavender via-mystic-cream to-mystic-rose font-montserrat'>
 			<Header cartItems={cartItems} onCartClick={() => {}} />
 
 			<main className='container mx-auto px-4 py-8'>
@@ -242,7 +242,7 @@ const UserManagementPage: React.FC = () => {
 						{/* Botón Crear Usuario */}
 						<Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
 							<DialogTrigger asChild>
-								<Button className='bg-mystic-beige hover:bg-mystic-gold text-gray-800'>
+								<Button className='bg-mystic-beige hover:bg-mystic-gold rounded-xl text-gray-800'>
 									<Plus className='w-4 h-4 mr-2' />
 									Crear Usuario
 								</Button>
