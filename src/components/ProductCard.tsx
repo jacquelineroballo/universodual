@@ -55,7 +55,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onViewP
 					<Button
 						onClick={onAddToCart}
 						disabled={product.stock === 0}
-						className='bg-mystic-beige hover:bg-mystic-gold text-gray-800 font-montserrat font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200'
+						className='bg-mystic-beige rounded-xl hover:bg-mystic-gold text-gray-800 font-montserrat font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200'
 					>
 						{product.stock > 0 ? 'Agregar' : 'Sin stock'}
 					</Button>

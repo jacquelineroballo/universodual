@@ -77,82 +77,62 @@ const IndexContent = () => {
 	return (
 		<>
 			<SEO />
-			<div className='min-h-screen bg-white font-montserrat'>
-				<Header cartItems={cartItems} onCartClick={() => setIsCartOpen(true)} />
+			<Header cartItems={cartItems} onCartClick={() => setIsCartOpen(true)} />
+			<main role='main'>
+				<Hero onShopNowClick={scrollToProducts} />
+				<section id='productos' aria-labelledby='productos-heading'>
+					<div className='container mx-auto px-0'>
+						<ProductList
+							products={productsToShow}
+							onAddToCart={handleAddToCart}
+							onViewProduct={handleViewProduct}
+							loading={loading}
+							error={error}
+							onRetry={fetchProducts}
+						/>
 
-				<main role='main'>
-					<Hero onShopNowClick={scrollToProducts} />
-
-					<section id='productos' className='py-16 bg-gray-50' aria-labelledby='productos-heading'>
-						<div className='container mx-auto px-4'>
-							<div className='text-center mb-12'>
-								<h2
-									id='productos-heading'
-									className='font-playfair text-3xl font-bold text-gray-800 mb-4'
+						{productsToShow.length > 0 && (
+							<div className='bg-white text-center py-5'>
+								<Link
+									to='/productos'
+									className='inline-block bg-gradient-to-r from-mystic-beige to-mystic-gold hover:from-mystic-gold hover:to-mystic-rose text-gray-800 font-montserrat px-8 py-3 rounded-xl hover:shadow-lg transition-all duration-300 transform hover:scale-105'
+									aria-label='Ver todos los productos del catálogo'
 								>
-									Nuestros Productos
-								</h2>
-								<p className='font-montserrat text-gray-600 max-w-2xl mx-auto mb-8'>
-									Descubre nuestra colección completa de productos místicos y espirituales
-								</p>
+									Ver +{products.length} productos
+								</Link>
 							</div>
+						)}
+					</div>
+				</section>
 
-							<ProductList
-								products={productsToShow}
-								onAddToCart={handleAddToCart}
-								onViewProduct={handleViewProduct}
-								loading={loading}
-								error={error}
-								onRetry={fetchProducts}
-							/>
-
-							{productsToShow.length > 0 && (
-								<div className='text-center mt-12'>
-									<Link
-										to='/productos'
-										className='inline-block bg-gradient-to-r from-mystic-beige to-mystic-gold hover:from-mystic-gold hover:to-mystic-rose text-gray-800 font-montserrat font-semibold px-8 py-3 rounded-lg hover:shadow-lg transition-all duration-300 transform hover:scale-105'
-										aria-label='Ver todos los productos del catálogo'
-									>
-										Ver Todo el Catálogo ({products.length} productos)
-									</Link>
-								</div>
-							)}
+				{/* Footer */}
+				<footer className='bg-mystic-lavender/30 py-5'>
+					<div className='container mx-auto px-4 text-center'>
+						<h3 className='font-playfair text-2xl font-bold text-gray-800 mb-2'>
+							Universo Dual ✨
+						</h3>
+						<p className='font-montserrat text-gray-600 mb-6'>
+							Conectando tu alma con la magia del universo⭐
+						</p>
+						<div className='flex justify-center space-x-6 text-sm text-gray-500 mb-2'>
+							<span> Universo Dual 2025 © Todos los derechos reservados</span>
 						</div>
-					</section>
-
-					<section className='py-16 bg-mystic-lavender' aria-labelledby='contact-heading'>
-						<div className='container mx-auto px-4 text-center'>
-							<h2
-								id='contact-heading'
-								className='font-playfair text-3xl font-bold text-gray-800 mb-8'
-							>
-								¿Necesitas ayuda?
-							</h2>
-							<p className='font-montserrat text-gray-600 max-w-2xl mx-auto mb-8'>
-								Estamos aquí para acompañarte en tu viaje espiritual. Contáctanos para cualquier
-								consulta sobre nuestros productos místicos.
-							</p>
-							<Link
-								to='/contacto'
-								className='inline-block bg-gradient-to-r from-mystic-rose to-mystic-gold text-gray-800 font-montserrat font-semibold px-8 py-3 rounded-lg hover:shadow-lg transition-all duration-300 transform hover:scale-105'
-								aria-label='Ir a la página de contacto'
-							>
-								Contáctanos
-							</Link>
+						<div className='flex justify-center space-x-6 text-sm text-gray-500'>
+							Creado por Jacqueline <div className='animate-bounce'>💖</div>
 						</div>
-					</section>
-				</main>
+					</div>
+				</footer>
+			</main>
 
-				<Cart
-					isOpen={isCartOpen}
-					onClose={() => setIsCartOpen(false)}
-					items={cartItems}
-					onUpdateQuantity={updateQuantity}
-					onRemoveItem={removeFromCart}
-					onClearCart={clearCart}
-					totalPrice={getTotalPrice()}
-				/>
-			</div>
+			<Cart
+				isOpen={isCartOpen}
+				onClose={() => setIsCartOpen(false)}
+				items={cartItems}
+				onUpdateQuantity={updateQuantity}
+				onRemoveItem={removeFromCart}
+				onClearCart={clearCart}
+				totalPrice={getTotalPrice()}
+			/>
 		</>
 	)
 }

@@ -59,6 +59,7 @@ const ProductList: React.FC<ProductListProps> = ({
 						))}
 					</div>
 				)}
+				
 			</div>
 		</section>
 	)

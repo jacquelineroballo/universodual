@@ -16,17 +16,8 @@ const Header: React.FC<HeaderProps> = ({ cartItems, onCartClick }) => {
 	const { user, isAdmin } = useAuth()
 	const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0)
 
-	const scrollToProducts = () => {
-		const element = document.getElementById('productos')
-		if (element) {
-			element.scrollIntoView({ behavior: 'smooth' })
-		} else {
-			navigate('/#productos')
-		}
-	}
-
 	return (
-		<header className='bg-gradient-to-r from-mystic-lavender via-mystic-cream to-mystic-rose shadow-lg sticky top-0 z-50'>
+		<header className='bg-white shadow-lg sticky top-0 z-50'>
 			<div className='container mx-auto px-4 py-2'>
 				<div className='flex items-center justify-between'>
 					{/* Logo */}
@@ -57,7 +48,7 @@ const Header: React.FC<HeaderProps> = ({ cartItems, onCartClick }) => {
 						</Link>
 						<Link
 							to='/productos'
-							className='font-montserrat text-gray-600 hover:text-gray-800 transition-colors'
+							className='font-montserrat text-gray-600 hover:text-mystic-gold transition-colors'
 						>
 							Catálogo
 						</Link>

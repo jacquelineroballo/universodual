@@ -22,6 +22,7 @@ import UserManagementPage from './pages/UserManagementPage'
 import ContactManagementPage from './pages/ContactManagementPage'
 import { ProductsProvider } from './contexts/ProductsContext'
 import ProductManagementPage from './pages/ProductManagementPage'
+import OurHistoryPage from './pages/OurHistoryPage'
 
 const queryClient = new QueryClient()
 
@@ -49,6 +50,7 @@ function App() {
 											<Route path='/admin/usuarios' element={<UserManagementPage />} />
 											<Route path='/admin/contactos' element={<ContactManagementPage />} />
 											<Route path='/admin/productos' element={<ProductManagementPage />} />
+											<Route path='/nuestra-historia' element={<OurHistoryPage />} />
 											<Route path='*' element={<NotFound />} />
 										</Routes>
 										<Toaster />

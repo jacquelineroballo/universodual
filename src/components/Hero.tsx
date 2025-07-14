@@ -40,7 +40,7 @@ const Hero: React.FC<HeroProps> = ({ onShopNowClick }) => {
 
 					<div className='flex flex-col sm:flex-row gap-4 justify-center'>
 						<Button
-							className='bg-mystic-beige hover:bg-mystic-gold text-gray-800 font-montserrat font-semibold px-8 py-3 text-lg'
+							className='bg-mystic-beige hover:bg-mystic-gold text-gray-800 font-montserrat font-semibold px-8 py-3 text-lg rounded-xl'
 							onClick={
 								onShopNowClick ||
 								(() => document.getElementById('productos')?.scrollIntoView({ behavior: 'smooth' }))
@@ -52,7 +52,7 @@ const Hero: React.FC<HeroProps> = ({ onShopNowClick }) => {
 						<Link to='/nuestra-historia'>
 							<Button
 								variant='outline'
-								className='border-mystic-gold text-mystic-gold hover:bg-mystic-gold hover:text-gray-800 font-montserrat font-semibold px-8 py-3 text-lg'
+								className='border-mystic-gold text-mystic-gold hover:bg-mystic-gold hover:text-gray-800 font-montserrat font-semibold px-8 py-3 text-lg rounded-xl'
 							>
 								Nuestra Historia
 							</Button>

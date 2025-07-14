@@ -200,6 +200,21 @@ const ContactPage: React.FC = () => {
 					</div>
 				</div>
 			</main>
+			{/* Footer */}
+			<footer className='bg-mystic-rose/30 py-5'>
+				<div className='container mx-auto px-4 text-center'>
+					<h3 className='font-playfair text-2xl font-bold text-gray-800 mb-2'>Universo Dual ✨</h3>
+					<p className='font-montserrat text-gray-600 mb-6'>
+						Conectando tu alma con la magia del universo⭐
+					</p>
+					<div className='flex justify-center space-x-6 text-sm text-gray-500 mb-2'>
+						<span> Universo Dual 2025 © Todos los derechos reservados</span>
+					</div>
+					<div className='flex justify-center space-x-6 text-sm text-gray-500'>
+						Creado por Jacqueline <div className='animate-bounce'>💖</div>
+					</div>
+				</div>
+			</footer>
 		</div>
 	)
 }

@@ -67,7 +67,7 @@ const OurHistoryPage: React.FC = () => {
 				</div>
 			</main>
 			{/* Footer */}
-			<footer className='bg-mystic-lavender py-5'>
+			<footer className='bg-mystic-lavender/30 py-5'>
 				<div className='container mx-auto px-4 text-center'>
 					<h3 className='font-playfair text-2xl font-bold text-gray-800 mb-2'>Universo Dual ✨</h3>
 					<p className='font-montserrat text-gray-600 mb-6'>
