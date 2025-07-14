@@ -87,6 +87,7 @@ npm run dev
 ## 🔐 Acceso al Panel de Administración
 
 **Usuario de prueba:**
+- Por primera vez crear el usuario y luego iniciar sesión con las siguientes credenciales:
 - 📧 `admin@universodual.com`
 - 🔒 `123456`
 
