@@ -28,6 +28,8 @@ const ProductsFilters: React.FC<ProductsFiltersProps> = ({
 		{ value: 'accesorios', label: 'Accesorios Místicos' },
 	]
 
+	console.log('ProductsFilters: Current state', { searchTerm, selectedCategory, totalResults })
+
 	return (
 		<div className='bg-white/60 backdrop-blur-sm rounded-lg p-6 mb-8 shadow-lg border border-mystic-lavender/20'>
 			<div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
@@ -45,7 +47,10 @@ const ProductsFilters: React.FC<ProductsFiltersProps> = ({
 					/>
 					<select
 						value={selectedCategory}
-						onChange={(e) => onCategoryChange(e.target.value)}
+						onChange={(e) => {
+							console.log('ProductsFilters: Category select changed to:', e.target.value)
+							onCategoryChange(e.target.value)
+						}}
 						className='w-full pl-10 pr-4 py-2 border border-mystic-lavender/30 rounded-md font-montserrat focus:border-mystic-gold focus:ring-mystic-gold/20 bg-white'
 						aria-label='Filtrar productos por categoría'
 					>

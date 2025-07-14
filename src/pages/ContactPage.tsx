@@ -4,7 +4,7 @@ import { Button } from '../components/ui/button'
 import { Input } from '../components/ui/input'
 import { Textarea } from '../components/ui/textarea'
 import { useToast } from '../hooks/use-toast'
-import { Send, ArrowLeft } from 'lucide-react'
+import { Send, Mail, Phone, Clock, MapPin } from 'lucide-react'
 import Header from '../components/Header'
 import { useCarrito } from '../contexts/CarritoContext'
 
@@ -64,28 +64,89 @@ const ContactPage: React.FC = () => {
 	}
 
 	return (
-		<div className='min-h-screen bg-white font-montserrat'>
+		<div className='min-h-screen bg-gradient-to-br from-mystic-lavender via-mystic-cream to-mystic-beige font-montserrat'>
 			<Header cartItems={cartItems} onCartClick={() => {}} />
 
-			<main className='container mx-auto px-4 py-12'>
-				<div className='max-w-md mx-auto'>
-					{/* Header */}
-					<div className='flex items-center gap-4 mb-8'>
-						<button
-							onClick={() => navigate('/')}
-							className='p-2 hover:bg-gray-100 rounded-full transition-colors'
-						>
-							<ArrowLeft className='w-5 h-5 text-gray-600' />
-						</button>
-						<h1 className='font-playfair text-2xl font-bold text-gray-800'>Contacto</h1>
+			{/* Hero Section */}
+			<div className='bg-mystic-lavender py-16'>
+				<div className='container mx-auto px-4 text-center'>
+					<h1 className='font-playfair text-5xl font-bold text-gray-800 mb-4'>Contacto</h1>
+					<p className='text-xl text-gray-700 max-w-2xl mx-auto'>
+						Estamos acá para acompañarte en tu viaje espiritual. Contactanos y descubrí el poder de
+						lo místico.
+					</p>
+				</div>
+			</div>
+
+			<main className='container mx-auto px-4 py-16'>
+				<div className='grid grid-cols-1 lg:grid-cols-2 gap-16 max-w-6xl mx-auto'>
+					{/* Contact Information */}
+					<div className='space-y-8'>
+						<div>
+							<h2 className='font-playfair text-3xl font-bold text-gray-800 mb-6'>
+								Información de Contacto
+							</h2>
+							<p className='text-gray-600 text-lg mb-8'>
+								¿Tenés alguna pregunta sobre nuestros productos? Estamos acá para ayudarte.
+							</p>
+						</div>
+
+						<div className='space-y-6'>
+							<div className='flex items-center gap-4 p-4 bg-mystic-lavender/30 rounded-lg'>
+								<div className='w-12 h-12 bg-mystic-lavender rounded-full flex items-center justify-center'>
+									<Mail className='w-6 h-6 text-gray-700' />
+								</div>
+								<div>
+									<h3 className='font-semibold text-gray-800'>Email</h3>
+									<p className='text-gray-600'>info@universodual.com</p>
+								</div>
+							</div>
+
+							<div className='flex items-center gap-4 p-4 bg-mystic-lavender/30 rounded-lg'>
+								<div className='w-12 h-12 bg-mystic-lavender rounded-full flex items-center justify-center'>
+									<Phone className='w-6 h-6 text-gray-700' />
+								</div>
+								<div>
+									<h3 className='font-semibold text-gray-800'>WhatsApp</h3>
+									<p className='text-gray-600'>+54 9 11 1234-5678</p>
+								</div>
+							</div>
+
+							<div className='flex items-center gap-4 p-4 bg-mystic-lavender/30 rounded-lg'>
+								<div className='w-12 h-12 bg-mystic-lavender rounded-full flex items-center justify-center'>
+									<Clock className='w-6 h-6 text-gray-700' />
+								</div>
+								<div>
+									<h3 className='font-semibold text-gray-800'>Horarios</h3>
+									<p className='text-gray-600'>Lunes a Viernes 9:00 - 18:00</p>
+								</div>
+							</div>
+
+							<div className='flex items-center gap-4 p-4 bg-mystic-lavender/30 rounded-lg'>
+								<div className='w-12 h-12 bg-mystic-lavender rounded-full flex items-center justify-center'>
+									<MapPin className='w-6 h-6 text-gray-700' />
+								</div>
+								<div>
+									<h3 className='font-semibold text-gray-800'>Ubicación</h3>
+									<p className='text-gray-600'>Buenos Aires, Argentina</p>
+								</div>
+							</div>
+						</div>
 					</div>
 
 					{/* Contact Form */}
-					<div className='bg-white border rounded-lg p-6'>
-						<form onSubmit={handleSubmit} className='space-y-4'>
+					<div className='bg-mystic-rose/30 p-8 rounded-2xl'>
+						<h2 className='font-playfair text-3xl font-bold text-gray-800 mb-4 text-center'>
+							Envianos un Mensaje
+						</h2>
+						<p className='text-gray-600 text-center mb-8'>
+							Completá el formulario y te responderemos pronto
+						</p>
+
+						<form onSubmit={handleSubmit} className='space-y-6'>
 							<div>
-								<label htmlFor='name' className='block text-sm font-medium text-gray-700 mb-1'>
-									Nombre
+								<label htmlFor='name' className='block text-sm font-medium text-gray-700 mb-2'>
+									Nombre completo
 								</label>
 								<Input
 									id='name'
@@ -93,12 +154,13 @@ const ContactPage: React.FC = () => {
 									value={name}
 									onChange={(e) => setName(e.target.value)}
 									required
-									placeholder='Tu nombre'
+									className='w-full bg-white'
+									placeholder='Tu nombre completo'
 								/>
 							</div>
 
 							<div>
-								<label htmlFor='email' className='block text-sm font-medium text-gray-700 mb-1'>
+								<label htmlFor='email' className='block text-sm font-medium text-gray-700 mb-2'>
 									Email
 								</label>
 								<Input
@@ -107,12 +169,13 @@ const ContactPage: React.FC = () => {
 									value={email}
 									onChange={(e) => setEmail(e.target.value)}
 									required
+									className='w-full bg-white'
 									placeholder='tu@email.com'
 								/>
 							</div>
 
 							<div>
-								<label htmlFor='message' className='block text-sm font-medium text-gray-700 mb-1'>
+								<label htmlFor='message' className='block text-sm font-medium text-gray-700 mb-2'>
 									Mensaje
 								</label>
 								<Textarea
@@ -120,17 +183,21 @@ const ContactPage: React.FC = () => {
 									value={message}
 									onChange={(e) => setMessage(e.target.value)}
 									required
-									className='min-h-[100px]'
-									placeholder='Tu mensaje...'
+									className='w-full min-h-[120px] bg-white'
+									placeholder='Cuéntanos en qué podemos ayudarte...'
 								/>
 							</div>
 
-							<Button type='submit' disabled={loading} className='w-full'>
+							<Button
+								type='submit'
+								disabled={loading}
+								className='w-full bg-mystic-rose hover:bg-mystic-rose/80 text-gray-800 font-semibold py-3 text-lg rounded-xl'
+							>
 								{loading ? (
 									'Enviando...'
 								) : (
 									<>
-										<Send className='w-4 h-4 mr-2' />
+										<Send className='w-5 h-5 mr-2' />
 										Enviar Mensaje
 									</>
 								)}

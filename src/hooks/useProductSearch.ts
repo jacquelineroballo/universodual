@@ -10,7 +10,13 @@ export const useProductSearch = (products: Product[], itemsPerPage: number = 12)
 	const filteredProducts = useMemo(() => {
 		if (!products || products.length === 0) return []
 
-		return products.filter((product) => {
+		console.log('useProductSearch: Filtering products', {
+			searchTerm,
+			selectedCategory,
+			totalProducts: products.length,
+		})
+
+		const filtered = products.filter((product) => {
 			const matchesSearch =
 				searchTerm === '' ||
 				product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -19,8 +25,20 @@ export const useProductSearch = (products: Product[], itemsPerPage: number = 12)
 
 			const matchesCategory = selectedCategory === '' || product.category === selectedCategory
 
+			console.log('Product filter check:', {
+				productName: product.name,
+				productCategory: product.category,
+				selectedCategory,
+				matchesSearch,
+				matchesCategory,
+				included: matchesSearch && matchesCategory,
+			})
+
 			return matchesSearch && matchesCategory
 		})
+
+		console.log('useProductSearch: Filtered results', { filteredCount: filtered.length })
+		return filtered
 	}, [products, searchTerm, selectedCategory])
 
 	// Calcular paginación
@@ -31,11 +49,13 @@ export const useProductSearch = (products: Product[], itemsPerPage: number = 12)
 
 	// Reset página cuando cambian los filtros
 	const handleSearchChange = (term: string) => {
+		console.log('useProductSearch: Search term changed to:', term)
 		setSearchTerm(term)
 		setCurrentPage(1)
 	}
 
 	const handleCategoryChange = (category: string) => {
+		console.log('useProductSearch: Category changed to:', category)
 		setSelectedCategory(category)
 		setCurrentPage(1)
 	}

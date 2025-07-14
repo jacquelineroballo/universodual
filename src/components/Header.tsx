@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ShoppingCart, Settings, Users, Star } from 'lucide-react'
+import { ShoppingCart, Settings, Star } from 'lucide-react'
 import { CartItem } from '../types/Product'
 import { Button } from './ui/button'
 import AuthButton from './AuthButton'
@@ -80,18 +80,6 @@ const Header: React.FC<HeaderProps> = ({ cartItems, onCartClick }) => {
 							>
 								<Settings className='w-4 h-4 mr-2' />
 								Admin
-							</Button>
-						)}
-
-						{user && user.email === 'admin@universodual.com' && (
-							<Button
-								onClick={() => navigate('/admin/usuarios')}
-								variant='outline'
-								size='sm'
-								className='font-montserrat bg-gradient-to-r from-mystic-lavender/20 to-mystic-rose/20 hover:from-mystic-lavender/40 hover:to-mystic-rose/40 text-gray-800 border border-mystic-lavender/30'
-							>
-								<Users className='w-4 h-4 mr-2' />
-								Usuarios
 							</Button>
 						)}
 
