@@ -1,15 +1,116 @@
 
+# 🌌 Universo Dual – Tienda Esotérica Online creada como proyecto final para el curso de Tech Adultos - React.js
 
-# Levantar el proyecto:
+Universo Dual es una tienda digital de productos místicos, especializada en velas artesanales, inciensos y artículos de ritual. Esta SPA moderna, construida con React y TypeScript, combina estética, fluidez y espiritualidad en una sola experiencia.
 
-Clonar el proyecto en tu local
+## 🧰 Tecnologías Utilizadas
 
-# Instala todas las dependencias
+### 🖥️ Frontend
+- ⚛️ **React 18.3.1** – Interfaces responsivas y reactivas
+- 🧾 **TypeScript** – Tipado fuerte para seguridad y escalabilidad
+- ⚡ **Vite** – Compilación ultrarrápida
+- 🧭 **React Router DOM** – Navegación fluida por rutas
+- 🎨 **Tailwind CSS** – Diseño responsivo con utilidades CSS
 
+### 💫 UI/UX
+- 🧱 **Shadcn/ui & Radix UI** – Componentes accesibles y personalizables
+- 🖼️ **Lucide React** – Iconografía SVG moderna
+- 🔔 **Sonner** – Toasts visuales y sutiles
+
+### 🔄 Gestión de Estado
+- 🎛️ **React Context API** – Manejo global del carrito y productos
+- 🔍 **TanStack Query** – Sincronización eficiente con el servidor
+- 📑 **React Hook Form + Zod** – Formularios con validación precisa
+
+### 🧩 Otras Utilidades
+- 🌐 **Helmet Async** – SEO dinámico por página
+- 📅 **Date-fns** – Manipulación de fechas
+- 🎠 **Embla Carousel** – Carrusel fluido de productos
+- 🔌 **MockAPI** – API simulada para testing
+
+## 🏗️ Estructura del Proyecto
+
+```
+src/
+├── components/              # Componentes reutilizables
+│   ├── ui/                 # Componentes de interfaz base (Shadcn)
+│   ├── ProductCard.tsx     # Tarjeta de producto
+│   ├── Cart.tsx           # Carrito de compras
+│   └── ...
+├── contexts/              # Contextos de React
+│   ├── CarritoContext.tsx
+│   └── ProductsContext.tsx
+├── hooks/                 # Hooks personalizados
+├── pages/                 # Páginas de la aplicación
+├── services/              # Servicios de API
+│   └── mockApi.ts         # API simulada
+├── types/                 # Definiciones de tipos TypeScript
+└── lib/                   # Utilidades y configuraciones
+```
+
+## 🚀 Cómo Ejecutar el Proyecto
+
+### 🔧 Requisitos
+- Node.js v16+
+- npm o yarn
+
+### 📥 Pasos de Instalación
+
+```bash
+git clone [URL_DEL_REPOSITORIO]
+cd universodual
 npm install
-
-# Inicia el servidor de desarrollo
-
 npm run dev
+```
 
-El proyecto se abrirá en http://localhost:8080 (o te mostrará la URL en la terminal).
+🌐 Accede en tu navegador a **http://localhost:8080**
+
+## 🧪 Scripts Disponibles
+
+| Script | Descripción |
+|--------|-------------|
+| `npm run dev` | Modo desarrollo |
+| `npm run build` | Compilación para producción |
+| `npm run preview` | Previsualización post build |
+| `npm run lint` | Corrección de estilo con ESLint |
+
+## 📱 Características Principales
+
+- 🧿 Catálogo de productos esotéricos
+- 🛍️ Carrito funcional con lógica completa
+- 📂 Navegación por categorías mágicas
+- 🔎 Búsqueda dinámica
+- 📲 Diseño responsive
+- 🧠 SEO optimizado con meta tags dinámicos y JSON-LD
+- 🛠️ Panel administrativo de gestión
+
+## 🔐 Acceso al Panel de Administración
+
+**Usuario de prueba:**
+- Por primera vez crear el usuario y luego iniciar sesión con las siguientes credenciales:
+- 📧 `admin@universodual.com`
+- 🔒 `123456`
+
+## 🎨 Diseño y Estética
+
+- 🎨 **Paleta:** tonos morados y dorados
+- ✒️ **Tipografía:** Playfair Display (títulos) + Montserrat (texto)
+- ♿ **Accesibilidad** con Radix UI
+- ✨ **Animaciones** suaves con Tailwind
+
+## 📈 Optimización SEO & Rendimiento
+
+- Meta tags dinámicos
+- Estructura JSON-LD
+- Lazy loading de imágenes
+- Preconexión de fuentes externas
+
+## 🛡️ Gestión de Errores
+
+- 🧱 Boundaries para captura de fallos
+- 💬 Mensajes amigables para estados de error
+- ⏳ Indicadores claros de carga
+
+## 📦 Dependencias
+
+Consulta el archivo `package.json` para ver la lista completa.
