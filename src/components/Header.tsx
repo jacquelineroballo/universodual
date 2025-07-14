@@ -76,7 +76,7 @@ const Header: React.FC<HeaderProps> = ({ cartItems, onCartClick }) => {
 								onClick={() => navigate('/admin')}
 								variant='outline'
 								size='sm'
-								className='font-montserrat bg-gradient-to-r from-mystic-gold/20 to-mystic-rose/20 hover:from-mystic-gold/40 hover:to-mystic-rose/40 text-gray-800 border border-mystic-gold/30'
+								className='font-montserrat bg-gradient-to-r from-mystic-gold/20 to-mystic-rose/20 hover:from-mystic-gold/40 hover:to-mystic-rose/40 text-gray-800 border border-mystic-gold/30 text-base rounded-xl'
 							>
 								<Settings className='w-4 h-4 mr-2' />
 								Admin
@@ -87,7 +87,7 @@ const Header: React.FC<HeaderProps> = ({ cartItems, onCartClick }) => {
 
 						<Button
 							onClick={onCartClick}
-							className='bg-mystic-lavender hover:bg-mystic-rose text-gray-800 relative'
+							className='text-gray-800 relative rounded-xl bg-[#c8b8db]/[0.72]'
 							size='sm'
 						>
 							<ShoppingCart className='w-5 h-5' />
